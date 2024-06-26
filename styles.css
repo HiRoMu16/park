@@ -1,0 +1,25 @@
+body {
+         transition: background-color 0.5s, color 0.5s;
+     }
+     
+     body.dark-mode {
+         background-color: #333;
+         color: #fff;
+     }
+     
+     .theme-toggle {
+         position: fixed;
+         top: 20px;
+         right: 20px;
+         z-index: 1000;
+     }
+     
+     .clover {
+         position: absolute;
+         width: 30px;
+         height: 30px;
+         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%234CAF50" d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 90c-22.1 0-40-17.9-40-40s17.9-40 40-40 40 17.9 40 40-17.9 40-40 40z"/><path fill="%234CAF50" d="M50 10c-22.1 0-40 17.9-40 40s17.9 40 40 40 40-17.9 40-40-17.9-40-40-40zm0 70c-16.5 0-30-13.5-30-30s13.5-30 30-30 30 13.5 30 30-13.5 30-30 30z"/></svg>');
+         background-size: cover;
+         opacity: 0.7;
+         pointer-events: none;
+     }
