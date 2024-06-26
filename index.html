@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
@@ -10,4 +10,107 @@
     <h1 class="title">Let's HTML& CSS を開発しよう！</h1>
     <p>HTML CSS</p>
   </body>
+</html> -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mori_166</title>
+    <!-- Bootstrap CSSの読み込み -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px;
+        }
+        .profile-image {
+            height: 200px;
+            width: auto;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-heading {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #333;
+        }
+        .section-content {
+            font-size: 16px;
+        }
+        .section img {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Aboutセクション -->
+        <div class="section" id="about">
+            <h2 class="section-heading">About</h2>
+            <p class="section-content">
+              <ul>
+                <li>北海道大学 情報科学院</li>
+                <li> <a href="https://www.hce-lab.net/">ヒューマンセントリック工学研究室</a> 博士課程１年</li>
+                <li>森 啓 (MORI Hiromu)</li>
+            </ul>
+            </p>
+            <img src="profile.jpg" alt="プロフィール画像" class="profile-image">
+        </div>
+
+        <!-- Researchセクション -->
+        <div class="section" id="research">
+            <h2 class="section-heading">Research</h2>
+            <p class="section-content">
+                現在の主な研究テーマは「走行拡張デバイスによる運動獲得過程の可視化と最適化」
+                <ul>
+                    <li>走行運動への介入によるRunning Economyの改善</li>
+                    <li>デバイスによる走行運動介入効果の個人差発生要因の解明</li>
+                </ul>
+                
+            </p>
+            <img src="research.png" alt="研究内容の画像" class="profile-image">
+        </div>
+
+        <!-- Developmentセクション -->
+        <div class="section" id="development">
+            <h2 class="section-heading">Development</h2>
+            <p class="section-content">
+                すきま時間でのいやしモノづくり
+                <ul>
+                    <li><a href= "https://qiita.com/ZAP_xgame/items/9487aeddd3b9fa9a8f1d" >M5StackのIMUとUnityを繋げた仮想飛行機運転</a></li>
+                    <li><a href= "https://qiita.com/ZAP_xgame/items/058b1be9c815a3c7f4b3" >EVMC4UとUnityを用いたUSBカメラモーションキャプチャでの動作推定</a></li>
+                    <li>高齢者向け音楽デバイス</li>
+                </ul>
+                
+            </p>
+            <img src="dev.jpg" alt="開発プロジェクトの画像" class="profile-image">
+        </div>
+
+        <!-- Activityセクション -->
+        <div class="section" id="activity">
+            <h2 class="section-heading">Activity</h2>
+            <p class="section-content">
+                研究以外のあんなことこんなこと
+                <ul>
+                    <li>北海学園大学 非常勤講師</li>
+                    <li>キャンプ，モノづくり．．．</li>
+                    <li>まれに企業のPowerPoint資料作成</li>
+                </ul>
+                
+            </p>
+            <img src="teach.jpg" alt="活動の画像" class="profile-image">
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-4 mb-4">
+            <p>&copy; 2024 〇〇大学 研究員 名前</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
