@@ -7,8 +7,20 @@ document.addEventListener('DOMContentLoaded', function() {
      
          // テーマ切り替え機能
          toggleButton.addEventListener('click', function() {
-             document.body.classList.toggle('dark-mode');
+                  document.body.classList.toggle('dark-mode');
+         
+         // セクション見出しの色を変更
+                  const sectionHeadings = document.querySelectorAll('.section-heading');
+                  sectionHeadings.forEach(heading => {
+                           if (document.body.classList.contains('dark-mode')) {
+                                    heading.style.color = '#fff';
+                           } else {
+                                    heading.style.color = '#333';
+                           }
+                  });
          });
+
+         
      
          // クローバー用のコンテナを作成
          const cloverContainer = document.createElement('div');

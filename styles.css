@@ -7,6 +7,14 @@ body.dark-mode {
     color: #fff;
 }
 
+.section-heading {
+    transition: color 0.5s;
+}
+
+body.dark-mode .section-heading {
+    color: #fff;
+}
+
 .theme-toggle {
     position: fixed;
     top: 20px;
