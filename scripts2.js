@@ -7,21 +7,22 @@ document.addEventListener("DOMContentLoaded", function() {
         const slideshow = document.querySelector(".hero-slideshow");
         slideshow.style.transition = index === totalSlides - 1 ? "none" : "transform 1s ease";
         slideshow.style.transform = `translateX(-${index * 25}%)`;
+        //25%は表示したいスライドが4枚のため，1/4ずつずらす意味
         currentIndex = index;
     }
 
     function nextSlide() {
-        if (currentIndex === totalSlides - 1) {
+        if (currentIndex === totalSlides -1) {
             showSlide(0);
             setTimeout(() => {
-                showSlide(1);
+                showSlide(0);// 振りだしに戻すときのサイト
             }, 20);
         } else {
             showSlide(currentIndex + 1);
         }
     }
 
-    setInterval(nextSlide, 4000);
+    setInterval(nextSlide, 5000);//遷移時間
 
     // Smooth scroll for navigation links
     const navLinks = document.querySelectorAll(".nav-list a");

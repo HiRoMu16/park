@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mori_166</title>
+    <!-- Bootstrap CSSの読み込み -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 新しく作成したCSSファイルの読み込み -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            padding-top: 70px;
+        }
+        .profile-image {
+            height: 200px;
+            width: auto;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section-heading {
+            margin-bottom: 15px;
+            font-size: 24px;
+            color: #333;
+        }
+        .section-content {
+            font-size: 16px;
+        }
+        .section img {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Aboutセクション -->
+        <div class="section" id="about">
+            <h2 class="section-heading">About</h2>
+            <p class="section-content">
+              <ul>
+                <li>北海道大学 情報科学院</li>
+                <li> <a href="https://www.hce-lab.net/">Human-Centric Engineering Lab.</a> DC1</li>
+                <li>森 啓 (MORI Hiromu)</li>
+            </ul>
+            研究以外では，麻雀，ジブリ，映画，漫画などでいやされてます
+            </p>
+            <img src="profile.jpg" alt="プロフィール" class="profile-image">
+        </div>
+
+        <!-- Researchセクション -->
+        <div class="section" id="research">
+            <h2 class="section-heading">Research</h2>
+            <p class="section-content">
+                テーマ「走行拡張デバイスによる運動獲得過程の可視化と最適化」
+                <ul>
+                    <li>走行運動への介入によるRunning Economyの改善</li>
+                    <li>デバイスによる走行運動介入効果の個人差発生要因の解明</li>
+                </ul>
+                
+            </p>
+            <img src="research.png" alt="研究背景" class="profile-image">
+        </div>
+
+        <!-- Developmentセクション -->
+        <div class="section" id="development">
+            <h2 class="section-heading">Development</h2>
+            <p class="section-content">
+                すきま時間でのいやしモノづくり
+                <ul>
+                    <li><a href= "https://qiita.com/mori_166/items/9487aeddd3b9fa9a8f1d" >M5StackのIMUとUnityを繋げた仮想飛行機運転</a></li>
+                    <li><a href= "https://qiita.com/mori_166/items/058b1be9c815a3c7f4b3" >EVMC4UとUnityを用いたUSBカメラモーションキャプチャでの動作推定</a></li>
+                    <li><a href= "https://1drv.ms/p/s!Ao1Y-esCpHmdg-ZToKzXJXhzAmoeDQ?e=1XaThq" >高齢者施設等で機能訓練を音楽で支援する『BeChestra』</a></li>
+                    <li><a href= "https://hiromu16.github.io/park/your-web-app/">曜日表示WEBアプリケ</a></li>
+                </ul>
+                
+            </p>
+            <img src="dev.jpg" alt="『BeChestra』の画像" class="profile-image">
+        </div>
+
+        <!-- Activityセクション -->
+        <div class="section" id="activity">
+            <h2 class="section-heading">Activity</h2>
+            <p class="section-content">
+                研究以外のあんなことこんなこと
+                <ul>
+                    <li>北海学園大学 非常勤講師</li>
+                    <li><a href= "https://phdiscover.jp/phd/article/2440" >共同研究型インターンシップ</a></li>
+                    <li>企業PowerPointスライド作成[<a href= "https://www.keiwa-biz.co.jp/" >恵和ビジネス 様</a>]</li>
+                </ul>
+                
+            </p>
+            <img src="teach.jpg" alt="地下鉄東豊線 学園前駅より" class="profile-image">
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-4 mb-4">
+            <p>&copy; 2024 北海道大学 情報科学院 森啓</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JSと依存するPopper.jsの読み込み -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- 新しく作成したJavaScriptファイルの読み込み -->
+    <script src="script.js"></script>
+</body>
+</html>
