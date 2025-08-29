@@ -1,0 +1,35 @@
+{
+    "name": "ROS2 Web SLAM Dev",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    // コンテナ内でGazeboなどのGUIアプリを動作させるための設定
+    "runArgs": [
+        "--network=host",
+        "--privileged",
+        "-v",
+        "/tmp/.X11-unix:/tmp/.X11-unix",
+        "-e",
+        "DISPLAY=${env:DISPLAY}"
+    ],
+    // VS Code拡張機能をコンテナ内にインストール
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-python.python",
+                "ms-azuretools.vscode-docker",
+                "redhat.vscode-yaml",
+                "dotjoshjohnson.xml",
+                "ms-iot.vscode-ros"
+            ]
+        }
+    },
+    // コンテナ作成後に実行するコマンド
+    "postCreateCommand": "if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then sudo rosdep init; fi && rosdep update && cd ros2_ws && colcon build --symlink-install",
+    // コンテナに接続した際のユーザー
+    "remoteUser": "vscode",
+    // ワークスペースのマウント設定
+    "workspaceFolder": "/workspaces/ros2-web-slam",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/ros2-web-slam,type=bind,consistency=cached"
+}
