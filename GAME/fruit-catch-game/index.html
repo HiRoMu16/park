@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>柿キャッチゲーム🍊</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- TensorFlow.js & MoveNetをCDNで読み込む -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script>
+</head>
+<body>
+  <div id="game-container">
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="game-canvas"></canvas>
+
+    <div id="ui">
+      <button id="start-button">ゲームスタート</button>
+      <div id="score">スコア: 0</div>
+      <div id="result" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+/* hand-draw-app/style.css */
+
+/* 全体設定 */
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: white;
+}
+
+/* カメラとキャンバスを重ねるコンテナ */
+#container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* 3層構造：video → landmark → draw の順で重ねる */
+#video,
+#landmark-canvas,
+#draw-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* レイヤー順指定 */
+#video {
+  transform: scaleX(-1); /* ← これだけで左右反転できる魔法！ */
+}
+#landmark-canvas {
+  z-index: 1;
+  pointer-events: none; /* マウス操作を貫通 */
+}
+#draw-canvas {
+  z-index: 2;
+  cursor: crosshair;
+}

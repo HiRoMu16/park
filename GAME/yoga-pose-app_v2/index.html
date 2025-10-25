@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ヨガ姿勢判定アプリ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.14.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection/dist/movenet.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    #video-section, #info-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #image-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+    }
+    #pose-image, #idealCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    #idealCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    video, canvas {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+    #score {
+      font-size: 1.8em;
+      margin: 10px;
+    }
+    #badge {
+      font-size: 2em;
+      color: green;
+    }
+    #yuruchara-area {
+      margin-top: 10px;
+      display: none;
+    }
+    #yuruchara-area img {
+      max-width: 200px;
+      height: auto;
+    }
+    #feedback {
+      margin-top: 10px;
+      font-size: 1em;
+      color: #aa0000;
+    }
+    #difficulty-buttons, #pose-select {
+      margin-top: 15px;
+    }
+    button, select {
+      padding: 10px 20px;
+      font-size: 1em;
+      margin: 5px;
+    }
+    #statusMessage {
+      margin-top: 10px;
+      color: #555;
+    }
+    @media (max-width: 768px) {
+      #container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>ヨガ姿勢判定アプリ🧘‍♀️</h1>
+  <div id="container">
+    <div id="info-section">
+      <p>ヨガポーズ見本</p>
+      <div id="image-wrapper">
+        <img id="pose-image" src="" alt="ヨガポーズ見本">
+        <canvas id="idealCanvas"></canvas>
+      </div>
+      <div id="statusMessage">準備中...</div>
+      <div id="score">スコア: 0</div>
+      <div id="badge"></div>
+      <div id="yuruchara-area">
+        <img id="yuruchara" src="assets/yuruchara/comment_oops.png" alt="ゆるキャラ">
+        <p id="yuruchara-comment">おっと、ちょっとズレてるよ！</p>
+      </div>
+      <div id="feedback"></div>
+      <div id="difficulty-buttons">
+        <button onclick="setDifficulty('normal')">ノーマル</button>
+        <button onclick="setDifficulty('hard')">ハード</button>
+      </div>
+      <div id="pose-select">
+        <select onchange="changePose(this.value)">
+          <option value="warrior_pose">ウォーリアポーズ</option>
+        </select>
+      </div>
+    </div>
+    <div id="video-section">
+      <video id="video" autoplay muted playsinline></video>
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const scoreDisplay = document.getElementById('score');
+    const badgeDisplay = document.getElementById('badge');
+    const yurucharaArea = document.getElementById('yuruchara-area');
+    const poseImage = document.getElementById('pose-image');
+    const statusMessage = document.getElementById('statusMessage');
+    const feedback = document.getElementById('feedback');
+    const idealCanvas = document.getElementById('idealCanvas');
+    const idealCtx = idealCanvas.getContext('2d');
+
+    let detector;
+    let difficulty = 'normal';
+    let idealPoses = {};
+    let currentPoseLabel = 'warrior_pose';
+    let lastScoreTime = 0;
+    const scoreInterval = 2000;
+    const synth = window.speechSynthesis;
+
+    async function initCamera() {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      video.srcObject = stream;
+      return new Promise(resolve => {
+        video.onloadedmetadata = () => resolve(video);
+      });
+    }
+
+    async function initDetector() {
+      detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
+    }
+
+    function speak(text) {
+      if (!synth || synth.speaking) return;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ja-JP';
+      synth.speak(utter);
+    }
+
+    function setDifficulty(level) {
+      difficulty = level;
+    }
+
+    function changePose(poseLabel) {
+      currentPoseLabel = poseLabel;
+      const posePath = `assets/poses/normal/${poseLabel}.jpg`;
+
+      poseImage.onload = () => {
+        idealCanvas.width = poseImage.naturalWidth;
+        idealCanvas.height = poseImage.naturalHeight;
+        idealCanvas.style.width = poseImage.clientWidth + 'px';
+        idealCanvas.style.height = poseImage.clientHeight + 'px';
+        updateIdealPoseFromImage(poseImage, currentPoseLabel);
+      };
+
+      poseImage.onerror = () => {
+        statusMessage.textContent = '❌ 見本画像の読み込みに失敗しました';
+      };
+
+      poseImage.src = posePath;
+    }
+
+    async function updateIdealPoseFromImage(image, label) {
+      try {
+        const offscreen = document.createElement('canvas');
+        offscreen.width = image.naturalWidth;
+        offscreen.height = image.naturalHeight;
+        const offctx = offscreen.getContext('2d');
+        offctx.drawImage(image, 0, 0);
+
+        const tempDetector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
+        const pose = await tempDetector.estimatePoses(offscreen);
+
+        if (pose && pose[0]) {
+          const keypoints = pose[0].keypoints.map((kp, i) => ({ ...kp, name: kp.name || `keypoint_${i}` }));
+          idealPoses[label] = keypoints;
+          statusMessage.textContent = `✅ 理想姿勢を読み込みました！`;
+          drawKeypointsOnImage(keypoints);
+        } else {
+          statusMessage.textContent = '❌ 理想姿勢が検出できませんでした';
+        }
+      } catch (err) {
+        console.error(err);
+        statusMessage.textContent = `❌ 理想姿勢の抽出に失敗しました：${err.message}`;
+      }
+    }
+
+    function drawKeypointsOnImage(keypoints) {
+      idealCtx.clearRect(0, 0, idealCanvas.width, idealCanvas.height);
+      for (const kp of keypoints) {
+        if (kp.score > 0.5) {
+          idealCtx.beginPath();
+          idealCtx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
+          idealCtx.fillStyle = 'lime';
+          idealCtx.fill();
+        }
+      }
+    }
+
+    function getAngle(p1, p2, p3) {
+      const a = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+      const b = Math.hypot(p2.x - p3.x, p2.y - p3.y);
+      const c = Math.hypot(p3.x - p1.x, p3.y - p1.y);
+      return Math.acos((a*a + b*b - c*c) / (2*a*b)) * (180 / Math.PI);
+    }
+
+    function getSimilarityScore(pose, idealPose) {
+      if (!pose || !pose.keypoints || !idealPose) return 0;
+      let anglesToCompare = [
+        ['left_shoulder', 'left_elbow', 'left_wrist'],
+        ['right_shoulder', 'right_elbow', 'right_wrist'],
+        ['left_hip', 'left_knee', 'left_ankle'],
+        ['right_hip', 'right_knee', 'right_ankle']
+      ];
+
+      let total = 0;
+      let count = 0;
+      let comments = [];
+
+      for (let [a, b, c] of anglesToCompare) {
+        const pa = pose.keypoints.find(kp => kp.name === a);
+        const pb = pose.keypoints.find(kp => kp.name === b);
+        const pc = pose.keypoints.find(kp => kp.name === c);
+        const ia = idealPose.find(kp => kp.name === a);
+        const ib = idealPose.find(kp => kp.name === b);
+        const ic = idealPose.find(kp => kp.name === c);
+
+        if (pa && pb && pc && ia && ib && ic) {
+          const userAngle = getAngle(pa, pb, pc);
+          const idealAngle = getAngle(ia, ib, ic);
+          const diff = Math.abs(userAngle - idealAngle);
+          const score = Math.max(0, 100 - diff * 1.5);
+          total += score;
+          count++;
+
+          if (diff > 15) {
+            comments.push(`${b} が理想より ${Math.round(diff)}° ずれています`);
+          }
+        }
+      }
+
+      feedback.textContent = (total / count < 90 && comments.length > 0)
+        ? '改善ポイント:\n' + comments.join('\n')
+        : '';
+
+      if (comments.length > 0) speak(comments[0]);
+
+      return count ? Math.round(total / count) : 0;
+    }
+
+    function updateUI(score) {
+      scoreDisplay.textContent = `スコア: ${score}`;
+      badgeDisplay.textContent = score >= 90 ? '🎉 ヨガマスター！' : '';
+      yurucharaArea.style.display = score < 60 ? 'block' : 'none';
+    }
+
+    async function detectPose() {
+      if (!detector) return;
+      const now = Date.now();
+      const poses = await detector.estimatePoses(video);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+
+      if (poses[0]) {
+        for (let kp of poses[0].keypoints) {
+          if (kp.score > 0.5) {
+            ctx.beginPath();
+            ctx.arc(kp.x, kp.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+          }
+        }
+        if (now - lastScoreTime > scoreInterval) {
+          const score = getSimilarityScore(poses[0], idealPoses[currentPoseLabel]);
+          updateUI(score);
+          lastScoreTime = now;
+        }
+      }
+      requestAnimationFrame(detectPose);
+    }
+
+    async function main() {
+      await initCamera();
+      await initDetector();
+      changePose(currentPoseLabel);
+      detectPose();
+    }
+
+    main();
+  </script>
+</body>
+</html>

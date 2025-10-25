@@ -1,0 +1,67 @@
+/* 背景＆配置 */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #222;
+  color: white;
+  text-align: center;
+}
+
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#video {
+  position: absolute;
+  /* 👇 修正: videoとcanvasを完全に重ねるため、位置とサイズを100%に */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 👇 修正: 映像全体が表示されるように 'contain' に変更 */
+  object-fit: contain;
+  opacity: 0.4; /* 少し見やすくしました */
+  transform: scaleX(-1);
+  z-index: 0;
+}
+
+
+/* Canvas（ゲーム描画） */
+#game-canvas {
+  position: absolute;
+  /* 👇 修正: video要素と全く同じ位置とサイズに設定 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* UI（スコア、ボタン） */
+#ui {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  text-align: right;
+}
+
+#score {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+#start-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#result {
+  font-size: 28px;
+  margin-top: 20px;
+  color: yellow;
+}
