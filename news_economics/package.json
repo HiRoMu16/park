@@ -1,0 +1,22 @@
+{
+  "name": "news-economics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Show latest 5 economics/business news from RSS feeds",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "rss-parser": "^3.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
+
