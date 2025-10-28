@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -25,24 +24,38 @@ def upload_video():
 
     file = request.files['video']
     
-    # 一時ファイルとして動画を保存 (OpenCVで読み込むため)
-    # 'with' を使うことで、処理終了後に自動的にファイルが削除される
-    with tempfile.NamedTemporaryFile(delete=True, suffix='.mp4') as temp_file:
-        file.save(temp_file.name)
+    # --- 修正箇所 ---
+    
+    # 1. 一時ファイルを「作成」し、すぐに「閉じる」 (Windowsの権限エラー回避)
+    #    delete=False にして、ファイルハンドルを閉じてもファイルが消えないようにする
+    try:
+        temp_f = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+        temp_f.close() # ★重要: ファイルハンドルを一度解放する
+        temp_file_path = temp_f.name # パス名だけを取得
+    except Exception as e:
+        app.logger.error(f"Failed to create temp file: {e}")
+        return jsonify({"error": f"Failed to create temp file: {e}"}), 500
+
+    all_landmarks = []
+    fps = 30 # デフォルトFPS
+
+    try:
+        # 2. アップロードされたデータを、閉じた一時ファイルのパスに「保存」する
+        file.save(temp_file_path)
         
-        cap = cv2.VideoCapture(temp_file.name)
+        # 3. OpenCVで一時ファイルを開く
+        cap = cv2.VideoCapture(temp_file_path)
         if not cap.isOpened():
             return jsonify({"error": "Could not open video file"}), 500
 
         fps = cap.get(cv2.CAP_PROP_FPS)
-        all_landmarks = [] # 全フレームのランドマークを格納するリスト
 
         # MediaPipe Poseのインスタンス化
         with mp_pose.Pose(
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
-            model_complexity=1, # 精度を優先 (0: fast, 1: accurate, 2: heavy)
-            static_image_mode=False # 動画モード
+            model_complexity=1, 
+            static_image_mode=False
         ) as pose:
             
             while cap.isOpened():
@@ -72,14 +85,25 @@ def upload_video():
 
         cap.release()
 
-        # 解析結果をJSONでフロントエンドに返す
+        # 4. 解析結果をJSONでフロントエンドに返す
         return jsonify({
             "fps": fps,
             "totalFrames": len(all_landmarks),
             "landmarksData": all_landmarks
         })
+    
+    except Exception as e:
+        # 処理中に何らかのエラーが発生した場合
+        app.logger.error(f"Error during video processing: {e}") # サーバーログにエラーを記録
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        # 5. ★重要: 処理が成功しても失敗しても、必ず一時ファイルを削除する
+        if os.path.exists(temp_file_path):
+            os.remove(temp_file_path)
+    
+    # --- 修正ここまで ---
 
 # サーバーの実行
 if __name__ == '__main__':
-    # debug=True で開発モード (コード変更時に自動リロード)
     app.run(debug=True, host='0.0.0.0', port=5000)
