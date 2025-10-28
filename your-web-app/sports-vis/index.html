@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>運動解析プロトタイプ</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
+        #videoContainer {
+            /* 動画とキャンバスを重ねるための基準 */
+            position: relative;
+            width: fit-content; /* コンテナの幅を動画に合わせる */
+            border: 1px solid #ccc;
+            background-color: #000;
+        }
+        #videoPlayer {
+            display: block;
+            max-width: 80vw; /* 画面幅の80%を最大 */
+            max-height: 70vh; /* 画面高さの70%を最大 */
+            height: auto;
+        }
+        #overlayCanvas {
+            /* 動画にぴったり重ねる */
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none; /* キャンバスがクリック操作を邪魔しないように */
+        }
+        #controls { margin: 15px 0; }
+        #analyzeButton { 
+            background-color: #007bff; color: white; border: none; 
+            padding: 10px 15px; border-radius: 5px; cursor: pointer;
+        }
+        #analyzeButton:disabled { background-color: #aaa; }
+        #loading { display: none; margin-left: 10px; color: #555; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h2>運動解析 Webアプリケーション (プロトタイプ)</h2>
+    <p>解析したいスポーツ動画（単一人物）を選択してください。</p>
+
+    <div id="controls">
+        <input type="file" id="videoInput" accept="video/*">
+        <button id="analyzeButton">1. 解析実行</button>
+        <span id="loading">解析中... (動画の長さによって時間がかかります)</span>
+    </div>
+
+    <div id="videoContainer">
+        <video id="videoPlayer" controls></video>
+        <canvas id="overlayCanvas"></canvas>
+    </div>
+
+    <script>
+        // HTML要素の取得
+        const videoInput = document.getElementById('videoInput');
+        const analyzeButton = document.getElementById('analyzeButton');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        const ctx = overlayCanvas.getContext('2d');
+        const loading = document.getElementById('loading');
+
+        // 解析データを保持する変数
+        let landmarksData = [];
+        let videoFPS = 30; // デフォルト
+        let totalFrames = 0;
+        let videoFile = null;
+
+        // MediaPipe Poseの接続情報 (スケルトン描画用)
+        const POSE_CONNECTIONS = [
+            [0, 1], [1, 2], [2, 3], [3, 7], [0, 4], [4, 5], [5, 6], [6, 8], [9, 10],
+            [11, 12], [11, 13], [13, 15], [15, 17], [15, 19], [15, 21], [17, 19],
+            [12, 14], [14, 16], [16, 18], [16, 20], [16, 22], [18, 20],
+            [11, 23], [12, 24], [23, 24],
+            [23, 25], [25, 27], [27, 29], [27, 31], [29, 31],
+            [24, 26], [26, 28], [28, 30], [28, 32], [30, 32]
+        ];
+
+        // --- イベントリスナーの設定 ---
+
+        // 1. 動画ファイルが選択されたら、video要素に読み込む
+        videoInput.addEventListener('change', (event) => {
+            videoFile = event.target.files[0];
+            if (videoFile) {
+                const fileURL = URL.createObjectURL(videoFile);
+                videoPlayer.src = fileURL;
+                // 解析データをリセット
+                landmarksData = [];
+                ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            }
+        });
+
+        // 2. videoのメタデータが読み込まれたら、Canvasのサイズを動画に合わせる
+        videoPlayer.addEventListener('loadedmetadata', () => {
+            overlayCanvas.width = videoPlayer.videoWidth;
+            overlayCanvas.height = videoPlayer.videoHeight;
+        });
+
+        // 3. 解析ボタンが押されたら、バックエンドに動画を送信
+        analyzeButton.addEventListener('click', async () => {
+            if (!videoFile) {
+                alert("まず動画ファイルを選択してください。");
+                return;
+            }
+
+            loading.style.display = 'inline';
+            analyzeButton.disabled = true;
+
+            const formData = new FormData();
+            formData.append('video', videoFile);
+
+            try {
+                // Flaskサーバー ( /upload ) にPOSTリクエスト
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`サーバーエラー: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // 解析結果をグローバル変数に保存
+                landmarksData = data.landmarksData;
+                videoFPS = data.fps;
+                totalFrames = data.totalFrames;
+
+                alert(`解析が完了しました。\nFPS: ${videoFPS.toFixed(2)}, 総フレーム数: ${totalFrames}`);
+                
+                // 描画ループを開始
+                requestAnimationFrame(drawLoop);
+
+            } catch (error) {
+                console.error("解析エラー:", error);
+                alert(`解析中にエラーが発生しました: ${error.message}`);
+            } finally {
+                loading.style.display = 'none';
+                analyzeButton.disabled = false;
+            }
+        });
+
+        // 4. 動画の再生時間に合わせて描画ループを実行
+        function drawLoop() {
+            // 解析データがまだない場合は何もしない
+            if (landmarksData.length === 0) {
+                requestAnimationFrame(drawLoop);
+                return;
+            }
+
+            // キャンバスをクリア
+            ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+            // 現在の動画時間から最も近いフレームインデックスを計算
+            const currentTime = videoPlayer.currentTime;
+            let currentFrameIndex = Math.floor(currentTime * videoFPS);
+
+            // 配列の範囲内に収める
+            if (currentFrameIndex >= totalFrames) currentFrameIndex = totalFrames - 1;
+            if (currentFrameIndex < 0) currentFrameIndex = 0;
+
+            const landmarks = landmarksData[currentFrameIndex];
+
+            // そのフレームにランドマークが検出されていれば描画
+            if (landmarks && landmarks.length > 0) {
+                drawSkeleton(landmarks);
+            }
+
+            // 次のフレームのためにループを予約
+            requestAnimationFrame(drawLoop);
+        }
+
+        // 5. スケルトンを描画するヘルパー関数
+        function drawSkeleton(landmarks) {
+            const canvasWidth = overlayCanvas.width;
+            const canvasHeight = overlayCanvas.height;
+            const visibilityThreshold = 0.5; // これ以下の信頼度の点は描画しない
+
+            ctx.strokeStyle = 'lime'; // 骨格の色
+            ctx.lineWidth = 3;
+
+            // 接続線 (骨格) を描画
+            POSE_CONNECTIONS.forEach(connection => {
+                const startIdx = connection[0];
+                const endIdx = connection[1];
+
+                if (landmarks[startIdx] && landmarks[endIdx]) {
+                    const start = landmarks[startIdx];
+                    const end = landmarks[endIdx];
+
+                    // visibilityが低い点 (隠れている点) は描画しない
+                    if (start.visibility > visibilityThreshold && end.visibility > visibilityThreshold) {
+                        ctx.beginPath();
+                        // 座標系は (0, 0) が左上
+                        ctx.moveTo(start.x * canvasWidth, start.y * canvasHeight);
+                        ctx.lineTo(end.x * canvasWidth, end.y * canvasHeight);
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            // 関節点を描画
+            ctx.fillStyle = 'red'; // 関節点の色
+            landmarks.forEach(landmark => {
+                if (landmark.visibility > visibilityThreshold) {
+                    ctx.beginPath();
+                    ctx.arc(landmark.x * canvasWidth, landmark.y * canvasHeight, 5, 0, 2 * Math.PI); // 半径5pxの円
+                    ctx.fill();
+                }
+            });
+        }
+        
+        // 描画ループを開始
+        requestAnimationFrame(drawLoop);
+    </script>
+</body>
+</html>
