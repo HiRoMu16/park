@@ -4,27 +4,26 @@
     <meta charset="UTF-8">
     <title>運動解析プロトタイプ</title>
     <style>
+        /* (前回と同じCSSなので省略) */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; background-color: #f4f4f4; }
         h2 { border-bottom: 2px solid #007bff; padding-bottom: 5px; }
         #videoContainer {
-            /* 動画とキャンバスを重ねるための基準 */
             position: relative;
-            width: fit-content; /* コンテナの幅を動画に合わせる */
+            width: fit-content; 
             border: 1px solid #ccc;
             background-color: #000;
         }
         #videoPlayer {
             display: block;
-            max-width: 80vw; /* 画面幅の80%を最大 */
-            max-height: 70vh; /* 画面高さの70%を最大 */
+            max-width: 80vw;
+            max-height: 70vh;
             height: auto;
         }
         #overlayCanvas {
-            /* 動画にぴったり重ねる */
             position: absolute;
             top: 0;
             left: 0;
-            pointer-events: none; /* キャンバスがクリック操作を邪魔しないように */
+            pointer-events: none;
         }
         #controls { margin: 15px 0; }
         #analyzeButton { 
@@ -37,13 +36,13 @@
 </head>
 <body>
 
-    <h2>運動解析 Webアプリケーション (プロトタイプ)</h2>
-    <p>解析したいスポーツ動画（単一人物）を選択してください。</p>
+    <h2>運動解析 Webアプリケーション (ステップ4: キネマティクス)</h2>
+    <p>動画を解析し、フィルター処理後のスケルトンと右手首の速度ベクトルを表示します。</p>
 
     <div id="controls">
         <input type="file" id="videoInput" accept="video/*">
         <button id="analyzeButton">1. 解析実行</button>
-        <span id="loading">解析中... (動画の長さによって時間がかかります)</span>
+        <span id="loading">解析中... (フィルター処理のため時間がかかります)</span>
     </div>
 
     <div id="videoContainer">
@@ -62,7 +61,8 @@
 
         // 解析データを保持する変数
         let landmarksData = [];
-        let videoFPS = 30; // デフォルト
+        let kinematicsData = {}; // ★追加: 速度データ用
+        let videoFPS = 30;
         let totalFrames = 0;
         let videoFile = null;
 
@@ -78,31 +78,27 @@
 
         // --- イベントリスナーの設定 ---
 
-        // 1. 動画ファイルが選択されたら、video要素に読み込む
         videoInput.addEventListener('change', (event) => {
             videoFile = event.target.files[0];
             if (videoFile) {
                 const fileURL = URL.createObjectURL(videoFile);
                 videoPlayer.src = fileURL;
-                // 解析データをリセット
                 landmarksData = [];
+                kinematicsData = {}; // ★追加
                 ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
             }
         });
 
-        // 2. videoのメタデータが読み込まれたら、Canvasのサイズを動画に合わせる
         videoPlayer.addEventListener('loadedmetadata', () => {
             overlayCanvas.width = videoPlayer.videoWidth;
             overlayCanvas.height = videoPlayer.videoHeight;
         });
 
-        // 3. 解析ボタンが押されたら、バックエンドに動画を送信
         analyzeButton.addEventListener('click', async () => {
             if (!videoFile) {
                 alert("まず動画ファイルを選択してください。");
                 return;
             }
-
             loading.style.display = 'inline';
             analyzeButton.disabled = true;
 
@@ -110,89 +106,84 @@
             formData.append('video', videoFile);
 
             try {
-                // Flaskサーバー ( /upload ) にPOSTリクエスト
                 const response = await fetch('/upload', {
                     method: 'POST',
                     body: formData
                 });
+                const data = await response.json(); // ★レスポンスをまず受け取る
 
                 if (!response.ok) {
-                    throw new Error(`サーバーエラー: ${response.status}`);
+                    // ★エラーが 'error' キーに含まれて返ってくる
+                    throw new Error(data.error || `サーバーエラー: ${response.status}`);
                 }
-
-                const data = await response.json();
                 
-                // 解析結果をグローバル変数に保存
                 landmarksData = data.landmarksData;
+                kinematicsData = data.kinematicsData; // ★追加
                 videoFPS = data.fps;
                 totalFrames = data.totalFrames;
 
                 alert(`解析が完了しました。\nFPS: ${videoFPS.toFixed(2)}, 総フレーム数: ${totalFrames}`);
-                
-                // 描画ループを開始
                 requestAnimationFrame(drawLoop);
 
             } catch (error) {
                 console.error("解析エラー:", error);
-                alert(`解析中にエラーが発生しました: ${error.message}`);
+                alert(`解析中にエラーが発生しました:\n${error.message}`); // ★詳細なエラーを表示
             } finally {
                 loading.style.display = 'none';
                 analyzeButton.disabled = false;
             }
         });
 
-        // 4. 動画の再生時間に合わせて描画ループを実行
+        // 描画ループ
         function drawLoop() {
-            // 解析データがまだない場合は何もしない
             if (landmarksData.length === 0) {
                 requestAnimationFrame(drawLoop);
                 return;
             }
 
-            // キャンバスをクリア
             ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
 
-            // 現在の動画時間から最も近いフレームインデックスを計算
             const currentTime = videoPlayer.currentTime;
             let currentFrameIndex = Math.floor(currentTime * videoFPS);
-
-            // 配列の範囲内に収める
             if (currentFrameIndex >= totalFrames) currentFrameIndex = totalFrames - 1;
             if (currentFrameIndex < 0) currentFrameIndex = 0;
 
             const landmarks = landmarksData[currentFrameIndex];
 
-            // そのフレームにランドマークが検出されていれば描画
             if (landmarks && landmarks.length > 0) {
+                // スケルトン描画
                 drawSkeleton(landmarks);
+                
+                // ★追加: 速度ベクトルの描画 (右手首: 16)
+                if (kinematicsData.right_wrist_velocity && kinematicsData.right_wrist_velocity[currentFrameIndex]) {
+                    const rightWristPos = landmarks[16]; // 右手首の「位置」
+                    const rightWristVel = kinematicsData.right_wrist_velocity[currentFrameIndex]; // 右手首の「速度」
+                    
+                    if(rightWristPos.visibility > 0.5) {
+                        drawVelocityVector(rightWristPos, rightWristVel, "yellow");
+                    }
+                }
             }
-
-            // 次のフレームのためにループを予約
             requestAnimationFrame(drawLoop);
         }
 
-        // 5. スケルトンを描画するヘルパー関数
+        // スケルトン描画関数 (前回と同じ)
         function drawSkeleton(landmarks) {
             const canvasWidth = overlayCanvas.width;
             const canvasHeight = overlayCanvas.height;
-            const visibilityThreshold = 0.5; // これ以下の信頼度の点は描画しない
+            const visibilityThreshold = 0.5; 
 
-            ctx.strokeStyle = 'lime'; // 骨格の色
+            ctx.strokeStyle = 'lime';
             ctx.lineWidth = 3;
 
-            // 接続線 (骨格) を描画
             POSE_CONNECTIONS.forEach(connection => {
                 const startIdx = connection[0];
                 const endIdx = connection[1];
-
                 if (landmarks[startIdx] && landmarks[endIdx]) {
                     const start = landmarks[startIdx];
                     const end = landmarks[endIdx];
-
-                    // visibilityが低い点 (隠れている点) は描画しない
                     if (start.visibility > visibilityThreshold && end.visibility > visibilityThreshold) {
                         ctx.beginPath();
-                        // 座標系は (0, 0) が左上
                         ctx.moveTo(start.x * canvasWidth, start.y * canvasHeight);
                         ctx.lineTo(end.x * canvasWidth, end.y * canvasHeight);
                         ctx.stroke();
@@ -200,18 +191,60 @@
                 }
             });
 
-            // 関節点を描画
-            ctx.fillStyle = 'red'; // 関節点の色
+            ctx.fillStyle = 'red';
             landmarks.forEach(landmark => {
                 if (landmark.visibility > visibilityThreshold) {
                     ctx.beginPath();
-                    ctx.arc(landmark.x * canvasWidth, landmark.y * canvasHeight, 5, 0, 2 * Math.PI); // 半径5pxの円
+                    ctx.arc(landmark.x * canvasWidth, landmark.y * canvasHeight, 5, 0, 2 * Math.PI);
                     ctx.fill();
                 }
             });
         }
         
-        // 描画ループを開始
+        // ★追加: 速度ベクトル（矢印）を描画する関数
+        function drawVelocityVector(startPos, velocityVec, color) {
+            const canvasWidth = overlayCanvas.width;
+            const canvasHeight = overlayCanvas.height;
+            
+            // 速度のスケーリング (この値を調整して矢印の長さを変える)
+            // 速度は [座標単位/秒] (0.0~1.0の範囲)。
+            // 例えば 1.0 の速度 (画面の端から端まで1秒) なら 300px で描画する
+            const scale = 300; 
+
+            const startX = startPos.x * canvasWidth;
+            const startY = startPos.y * canvasHeight;
+            
+            // 速度ベクトル (vx, vy)
+            // MediaPipeの座標系 (yが下向き) とCanvasの座標系は一致している
+            const vx = velocityVec[0]; // x速度
+            const vy = velocityVec[1]; // y速度
+
+            const endX = startX + (vx * scale);
+            const endY = startY + (vy * scale);
+
+            // 矢印の描画
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2;
+
+            // 矢印の本体 (線)
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+
+            // 矢印の先端 (三角形)
+            const headlen = 10; // 矢印の先端の長さ
+            const angle = Math.atan2(endY - startY, endX - startX);
+            
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(endX - headlen * Math.cos(angle - Math.PI / 6), endY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(endX - headlen * Math.cos(angle + Math.PI / 6), endY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(endX, endY);
+            ctx.fill();
+        }
+        
         requestAnimationFrame(drawLoop);
     </script>
 </body>
