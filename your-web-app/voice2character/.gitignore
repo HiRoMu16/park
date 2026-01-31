@@ -47,3 +47,6 @@ logs/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# エラーログファイル
+error*.txt
