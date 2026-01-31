@@ -1,0 +1,270 @@
+/* ============================================
+   グローバルスタイル
+   Tailwind CSS指令とカスタムスタイルの定義
+   ============================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   ベーススタイル
+   ============================================ */
+@layer base {
+  /* ダークモード用の背景グラデーション */
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-300;
+  }
+
+  .dark body,
+  html.dark body {
+    @apply bg-gray-950 text-gray-100;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(79, 70, 229, 0.04) 0%, transparent 50%);
+  }
+
+  /* スムーズスクロール */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ============================================
+   コンポーネントスタイル
+   ============================================ */
+@layer components {
+  /* プログレスバーのアニメーション */
+  .progress-bar-animated {
+    background: linear-gradient(
+      90deg,
+      theme('colors.brand.500') 0%,
+      theme('colors.brand.400') 30%,
+      theme('colors.brand.600') 70%,
+      theme('colors.brand.500') 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s ease-in-out infinite;
+  }
+
+  /* プログレスバーの縞模様 */
+  .progress-bar-striped {
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: 1rem 1rem;
+    animation: progress-stripes 1s linear infinite;
+  }
+
+  /* ドラッグ&ドロップエリア */
+  .drop-zone {
+    @apply relative overflow-hidden rounded-2xl border-2 border-dashed
+           border-gray-300 bg-gray-50 p-8 text-center
+           transition-all duration-300 ease-out;
+  }
+
+  .drop-zone:hover {
+    @apply border-brand-400 bg-brand-50/50;
+  }
+
+  .dark .drop-zone {
+    @apply border-gray-600 bg-gray-800/50;
+  }
+
+  .dark .drop-zone:hover {
+    @apply border-brand-500 bg-brand-950/30;
+  }
+
+  /* ドラッグオーバー時のアクティブスタイル */
+  .drop-zone-active {
+    @apply border-brand-500 bg-brand-50 shadow-lg shadow-brand-500/20;
+    animation: pulse-border 1.5s ease-in-out infinite;
+  }
+
+  .dark .drop-zone-active {
+    @apply border-brand-400 bg-brand-950/40 shadow-brand-400/20;
+  }
+
+  /* 円形プログレスバー */
+  .circular-progress {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  .circular-progress-track {
+    @apply stroke-gray-200;
+  }
+
+  .dark .circular-progress-track {
+    @apply stroke-gray-700;
+  }
+
+  .circular-progress-fill {
+    transition: stroke-dashoffset 0.5s ease-out;
+  }
+
+  /* ステータスバッジ */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1
+           text-xs font-semibold tracking-wide;
+  }
+
+  /* ガラスモーフィズム効果 */
+  .glass-card {
+    @apply rounded-2xl border border-white/20 bg-white/80 shadow-lg backdrop-blur-lg;
+  }
+
+  .dark .glass-card {
+    @apply border-white/10 bg-gray-900/80;
+  }
+}
+
+/* ============================================
+   ユーティリティスタイル
+   ============================================ */
+@layer utilities {
+  /* テキストグラデーション */
+  .text-gradient {
+    @apply bg-gradient-to-r from-brand-600 via-brand-500 to-purple-500
+           bg-clip-text text-transparent;
+  }
+
+  .dark .text-gradient {
+    @apply from-brand-400 via-brand-300 to-purple-400;
+  }
+}
+
+/* ============================================
+   カスタムアニメーション
+   ============================================ */
+
+/* プログレスバーのシマー効果 */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* プログレスバーの縞模様アニメーション */
+@keyframes progress-stripes {
+  0% { background-position: 1rem 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ドラッグ領域のボーダーパルスアニメーション */
+@keyframes pulse-border {
+  0%, 100% { border-color: theme('colors.brand.500'); }
+  50% { border-color: theme('colors.brand.300'); }
+}
+
+/* ファイルアップロード時の波紋アニメーション */
+@keyframes ripple-effect {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.upload-ripple {
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle,
+    theme('colors.brand.400') 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: ripple-effect 1.5s ease-out forwards;
+}
+
+/* ============================================
+   スクロールバーのカスタマイズ
+   ============================================ */
+
+/* Webkit系ブラウザ用 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.gray.300');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.gray.400');
+}
+
+/* ダークモード用スクロールバー */
+.dark ::-webkit-scrollbar-thumb {
+  background: theme('colors.gray.600');
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.gray.500');
+}
+
+/* Firefox用 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: theme('colors.gray.300') transparent;
+}
+
+.dark * {
+  scrollbar-color: theme('colors.gray.600') transparent;
+}
+
+/* ============================================
+   トランジションユーティリティ
+   ============================================ */
+.page-transition {
+  animation: fadeSlideIn 0.4s ease-out;
+}
+
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* セグメントハイライトアニメーション */
+.segment-highlight {
+  animation: highlightFade 2s ease-out;
+}
+
+@keyframes highlightFade {
+  0% { background-color: theme('colors.brand.100'); }
+  100% { background-color: transparent; }
+}
+
+.dark .segment-highlight {
+  animation: highlightFadeDark 2s ease-out;
+}
+
+@keyframes highlightFadeDark {
+  0% { background-color: theme('colors.brand.900/30'); }
+  100% { background-color: transparent; }
+}

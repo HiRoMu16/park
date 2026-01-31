@@ -1,0 +1,923 @@
+#16 31.34 Get:98 http://deb.debian.org/debian trixie/main amd64 libtheoraenc1 amd64 1.2.0~alpha1+dfsg-6 [108 kB]
+#16 31.37 Get:99 http://deb.debian.org/debian trixie/main amd64 libtwolame0 amd64 0.4.0-2+b2 [51.3 kB]       
+#16 31.39 Get:100 http://deb.debian.org/debian trixie/main amd64 libvorbis0a amd64 1.3.7-3 [90.0 kB]
+#16 31.42 Get:101 http://deb.debian.org/debian trixie/main amd64 libvorbisenc2 amd64 1.3.7-3 [75.4 kB]       
+#16 31.45 Get:102 http://deb.debian.org/debian trixie/main amd64 libvpx9 amd64 1.15.0-2.1 [1115 kB]
+#16 31.64 Get:103 http://deb.debian.org/debian trixie/main amd64 libwebpmux3 amd64 1.5.0-0.1 [126 kB]
+#16 31.67 Get:104 http://deb.debian.org/debian trixie/main amd64 libx264-164 amd64 2:0.164.3108+git31e19f9-2+b1 [558 kB]
+#16 31.72 Get:105 http://deb.debian.org/debian trixie/main amd64 libnuma1 amd64 2.0.19-1 [22.2 kB]
+#16 31.74 Get:106 http://deb.debian.org/debian trixie/main amd64 libx265-215 amd64 4.1-2 [1237 kB]
+#16 31.84 Get:107 http://deb.debian.org/debian trixie/main amd64 libxvidcore4 amd64 2:1.3.7-1+b2 [252 kB]
+#16 31.88 Get:108 http://deb.debian.org/debian trixie/main amd64 libzvbi-common all 0.2.44-1 [71.4 kB]       
+#16 31.91 Get:109 http://deb.debian.org/debian trixie/main amd64 libzvbi0t64 amd64 0.2.44-1 [278 kB]
+#16 31.97 Get:110 http://deb.debian.org/debian trixie/main amd64 libavcodec61 amd64 7:7.1.3-0+deb13u1 [5808 kB]
+#16 32.26 Get:111 http://deb.debian.org/debian trixie/main amd64 libasound2-data all 1.2.14-1 [21.1 kB]
+#16 32.28 Get:112 http://deb.debian.org/debian trixie/main amd64 libasound2t64 amd64 1.2.14-1 [381 kB]
+#16 32.36 Get:113 http://deb.debian.org/debian trixie/main amd64 libraw1394-11 amd64 2.1.2-2+b2 [38.8 kB]    
+#16 32.38 Get:114 http://deb.debian.org/debian trixie/main amd64 libavc1394-0 amd64 0.5.4-5+b2 [18.2 kB]
+#16 32.40 Get:115 http://deb.debian.org/debian trixie/main amd64 libunibreak6 amd64 6.1-3 [21.9 kB]
+#16 32.43 Get:116 http://deb.debian.org/debian trixie/main amd64 libass9 amd64 1:0.17.3-1+b1 [114 kB]        
+#16 32.46 Get:117 http://deb.debian.org/debian trixie/main amd64 libudfread0 amd64 1.1.2-1+b2 [17.7 kB]      
+#16 32.48 Get:118 http://deb.debian.org/debian trixie/main amd64 libbluray2 amd64 1:1.3.4-1+b2 [138 kB]      
+#16 32.52 Get:119 http://deb.debian.org/debian trixie/main amd64 libchromaprint1 amd64 1.5.1-7 [42.9 kB]
+#16 32.54 Get:120 http://deb.debian.org/debian trixie/main amd64 libdvdread8t64 amd64 6.1.3-2 [86.2 kB]      
+#16 32.57 Get:121 http://deb.debian.org/debian trixie/main amd64 libdvdnav4 amd64 6.1.1-3+b1 [44.5 kB]       
+#16 32.59 Get:122 http://deb.debian.org/debian trixie/main amd64 libgme0 amd64 0.6.3-7+b2 [131 kB]
+#16 32.63 Get:123 http://deb.debian.org/debian trixie/main amd64 libmpg123-0t64 amd64 1.32.10-1 [149 kB]     
+#16 32.65 Get:124 http://deb.debian.org/debian trixie/main amd64 libvorbisfile3 amd64 1.3.7-3 [20.9 kB]      
+#16 32.68 Get:125 http://deb.debian.org/debian trixie/main amd64 libopenmpt0t64 amd64 0.7.13-1+b1 [855 kB]   
+#16 32.74 Get:126 http://deb.debian.org/debian trixie/main amd64 librabbitmq4 amd64 0.15.0-1 [41.8 kB]
+#16 32.76 Get:127 http://deb.debian.org/debian trixie/main amd64 libcjson1 amd64 1.7.18-3.1+deb13u1 [29.8 kB]
+#16 32.78 Get:128 http://deb.debian.org/debian trixie/main amd64 libmbedcrypto16 amd64 3.6.5-0.1~deb13u1 [361 kB]
+#16 ...
+
+#20 [frontend deps 5/5] RUN   if [ -f package-lock.json ]; then npm ci;   else npm install;   fi
+#20 16.69 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+#20 17.85 npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+#20 19.00 npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+#20 19.22 npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+#20 19.39 npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+#20 21.58 npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+#20 ...
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 32.82 Get:129 http://deb.debian.org/debian trixie/main amd64 librist4 amd64 0.2.11+dfsg-1 [72.1 kB]      
+#16 32.85 Get:130 http://deb.debian.org/debian trixie/main amd64 libsrt1.5-gnutls amd64 1.5.4-1 [345 kB]     
+#16 32.89 Get:131 http://deb.debian.org/debian trixie/main amd64 libssh-4 amd64 0.11.2-1+deb13u1 [209 kB]    
+#16 32.93 Get:132 http://deb.debian.org/debian trixie/main amd64 libnorm1t64 amd64 1.5.9+dfsg-3.1+b2 [221 kB]
+#16 32.97 Get:133 http://deb.debian.org/debian trixie/main amd64 libpgm-5.3-0t64 amd64 5.3.128~dfsg-2.1+b1 [162 kB]
+#16 33.00 Get:134 http://deb.debian.org/debian-security trixie-security/main amd64 libsodium23 amd64 1.0.18-1+deb13u1 [165 kB]
+#16 33.04 Get:135 http://deb.debian.org/debian trixie/main amd64 libzmq5 amd64 4.3.5-1+b3 [283 kB]
+#16 33.08 Get:136 http://deb.debian.org/debian trixie/main amd64 libavformat61 amd64 7:7.1.3-0+deb13u1 [1193 kB]
+#16 33.17 Get:137 http://deb.debian.org/debian trixie/main amd64 libbs2b0 amd64 3.1.0+dfsg-8+b1 [12.5 kB]
+#16 33.19 Get:138 http://deb.debian.org/debian trixie/main amd64 libflite1 amd64 2.2-7 [12.8 MB]
+#16 33.84 Get:139 http://deb.debian.org/debian trixie/main amd64 libserd-0-0 amd64 0.32.4-1 [47.0 kB]
+#16 33.86 Get:140 http://deb.debian.org/debian trixie/main amd64 libzix-0-0 amd64 0.6.2-1 [23.1 kB]
+#16 33.88 Get:141 http://deb.debian.org/debian trixie/main amd64 libsord-0-0 amd64 0.16.18-1 [18.0 kB]       
+#16 33.90 Get:142 http://deb.debian.org/debian trixie/main amd64 libsratom-0-0 amd64 0.6.18-1 [17.7 kB]      
+#16 33.92 Get:143 http://deb.debian.org/debian trixie/main amd64 liblilv-0-0 amd64 0.24.26-1 [43.5 kB]       
+#16 33.95 Get:144 http://deb.debian.org/debian trixie/main amd64 libmysofa1 amd64 1.3.3+dfsg-1 [1158 kB]
+#16 34.03 Get:145 http://deb.debian.org/debian trixie/main amd64 libvulkan1 amd64 1.4.309.0-1 [130 kB]       
+#16 34.06 Get:146 http://deb.debian.org/debian trixie/main amd64 libplacebo349 amd64 7.349.0-3 [2542 kB]
+#16 34.17 Get:147 http://deb.debian.org/debian trixie/main amd64 libblas3 amd64 3.12.1-6 [160 kB]
+#16 34.21 Get:148 http://deb.debian.org/debian trixie/main amd64 libgfortran5 amd64 14.2.0-19 [836 kB]       
+#16 34.27 Get:149 http://deb.debian.org/debian trixie/main amd64 liblapack3 amd64 3.12.1-6 [2447 kB]
+#16 34.44 Get:150 http://deb.debian.org/debian trixie/main amd64 libasyncns0 amd64 0.8-6+b5 [12.0 kB]
+#16 34.46 Get:151 http://deb.debian.org/debian trixie/main amd64 libdbus-1-3 amd64 1.16.2-2 [178 kB]
+#16 34.50 Get:152 http://deb.debian.org/debian trixie/main amd64 libflac14 amd64 1.5.0+ds-2 [210 kB]
+#16 34.54 Get:153 http://deb.debian.org/debian trixie/main amd64 libsndfile1 amd64 1.2.2-2+b1 [199 kB]
+#16 34.57 Get:154 http://deb.debian.org/debian trixie/main amd64 libpulse0 amd64 17.0+dfsg1-2+b1 [276 kB]    
+#16 34.62 Get:155 http://deb.debian.org/debian trixie/main amd64 libsphinxbase3t64 amd64 0.8+5prealpha+1-21+b1 [121 kB]
+#16 34.65 Get:156 http://deb.debian.org/debian trixie/main amd64 libpocketsphinx3 amd64 0.8+5prealpha+1-15+b4 [126 kB]
+#16 34.67 Get:157 http://deb.debian.org/debian trixie/main amd64 libpostproc58 amd64 7:7.1.3-0+deb13u1 [88.3 kB]
+#16 34.71 Get:158 http://deb.debian.org/debian trixie/main amd64 libfftw3-double3 amd64 3.3.10-2+b1 [781 kB] 
+#16 34.77 Get:159 http://deb.debian.org/debian trixie/main amd64 libsamplerate0 amd64 0.2.2-4+b2 [950 kB]
+#16 34.86 Get:160 http://deb.debian.org/debian trixie/main amd64 librubberband2 amd64 3.3.0+dfsg-2+b3 [142 kB]
+#16 34.90 Get:161 http://deb.debian.org/debian trixie/main amd64 libswscale8 amd64 7:7.1.3-0+deb13u1 [233 kB]
+#16 34.92 Get:162 http://deb.debian.org/debian trixie/main amd64 libvidstab1.1 amd64 1.1.0-2+b2 [38.9 kB]    
+#16 34.95 Get:163 http://deb.debian.org/debian trixie/main amd64 libzimg2 amd64 3.0.5+ds1-1+b2 [244 kB]      
+#16 34.99 Get:164 http://deb.debian.org/debian trixie/main amd64 libavfilter10 amd64 7:7.1.3-0+deb13u1 [4109 kB]
+#16 35.19 Get:165 http://deb.debian.org/debian trixie/main amd64 libslang2 amd64 2.3.3-5+b2 [549 kB]
+#16 35.23 Get:166 http://deb.debian.org/debian trixie/main amd64 libcaca0 amd64 0.99.beta20-5 [202 kB]
+#16 35.27 Get:167 http://deb.debian.org/debian trixie/main amd64 libcdio19t64 amd64 2.2.0-4 [61.3 kB]        
+#16 35.29 Get:168 http://deb.debian.org/debian trixie/main amd64 libcdio-cdda2t64 amd64 10.2+2.0.2-1+b1 [17.7 kB]
+#16 35.31 Get:169 http://deb.debian.org/debian trixie/main amd64 libcdio-paranoia2t64 amd64 10.2+2.0.2-1+b1 [17.4 kB]
+#16 35.33 Get:170 http://deb.debian.org/debian trixie/main amd64 libusb-1.0-0 amd64 2:1.0.28-1 [59.6 kB]     
+#16 35.35 Get:171 http://deb.debian.org/debian trixie/main amd64 libdc1394-25 amd64 2.2.6-5 [111 kB]
+#16 35.38 Get:172 http://deb.debian.org/debian trixie/main amd64 libglvnd0 amd64 1.7.0-1+b2 [52.0 kB]        
+#16 35.41 Get:173 http://deb.debian.org/debian trixie/main amd64 libxcb-glx0 amd64 1.17.0-2+b1 [122 kB]
+#16 35.44 Get:174 http://deb.debian.org/debian trixie/main amd64 libxcb-present0 amd64 1.17.0-2+b1 [106 kB]  
+#16 35.46 Get:175 http://deb.debian.org/debian trixie/main amd64 libxcb-xfixes0 amd64 1.17.0-2+b1 [109 kB]   
+#16 35.49 Get:176 http://deb.debian.org/debian trixie/main amd64 libxxf86vm1 amd64 1:1.1.4-1+b4 [19.3 kB]    
+#16 35.51 Get:177 http://deb.debian.org/debian trixie/main amd64 libdrm-amdgpu1 amd64 2.4.124-2 [22.6 kB]
+#16 35.53 Get:178 http://deb.debian.org/debian trixie/main amd64 libpciaccess0 amd64 0.17-3+b3 [51.9 kB]     
+#16 35.56 Get:179 http://deb.debian.org/debian trixie/main amd64 libdrm-intel1 amd64 2.4.124-2 [64.1 kB]     
+#16 35.59 Get:180 http://deb.debian.org/debian trixie/main amd64 libelf1t64 amd64 0.192-4 [189 kB]
+#16 35.62 Get:181 http://deb.debian.org/debian trixie/main amd64 libedit2 amd64 3.1-20250104-1 [93.8 kB]
+#16 35.66 Get:182 http://deb.debian.org/debian trixie/main amd64 libz3-4 amd64 4.13.3-1 [8560 kB]
+#16 36.19 Get:183 http://deb.debian.org/debian trixie/main amd64 libllvm19 amd64 1:19.1.7-3+b1 [26.0 MB]
+#16 37.71 Get:184 http://deb.debian.org/debian trixie/main amd64 libsensors-config all 1:3.6.2-2 [16.2 kB]
+#16 37.74 Get:185 http://deb.debian.org/debian trixie/main amd64 libsensors5 amd64 1:3.6.2-2 [37.5 kB]
+#16 37.76 Get:186 http://deb.debian.org/debian trixie/main amd64 libxcb-randr0 amd64 1.17.0-2+b1 [117 kB]    
+#16 37.79 Get:187 http://deb.debian.org/debian trixie/main amd64 libxcb-sync1 amd64 1.17.0-2+b1 [109 kB]     
+#16 37.82 Get:188 http://deb.debian.org/debian trixie/main amd64 libxshmfence1 amd64 1.3.3-1 [10.9 kB]
+#16 37.84 Get:189 http://deb.debian.org/debian trixie/main amd64 mesa-libgallium amd64 25.0.7-2 [9629 kB]    
+#16 ...
+
+#23 [worker builder 5/5] RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+#23 8.835   Downloading tiktoken-0.12.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.7 kB)
+#23 8.873 Collecting future (from ffmpeg-python==0.2.0->-r requirements.txt (line 14))
+#23 8.892   Downloading future-1.0.0-py3-none-any.whl.metadata (4.0 kB)
+#23 8.927 Collecting annotated-types>=0.4.0 (from pydantic==2.6.1->-r requirements.txt (line 15))
+#23 8.946   Downloading annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+#23 10.06 Collecting pydantic-core==2.16.2 (from pydantic==2.6.1->-r requirements.txt (line 15))
+#23 10.08   Downloading pydantic_core-2.16.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+#23 10.16 Collecting ecdsa!=0.15 (from python-jose==3.3.0->-r requirements.txt (line 19))
+#23 10.18   Downloading ecdsa-0.19.1-py2.py3-none-any.whl.metadata (29 kB)
+#23 10.22 Collecting rsa (from python-jose==3.3.0->-r requirements.txt (line 19))
+#23 10.24   Downloading rsa-4.9.1-py3-none-any.whl.metadata (5.6 kB)
+#23 10.30 Collecting pyasn1 (from python-jose==3.3.0->-r requirements.txt (line 19))
+#23 10.32   Downloading pyasn1-0.6.2-py3-none-any.whl.metadata (8.4 kB)
+#23 10.38 Collecting anyio (from httpx==0.27.0->-r requirements.txt (line 20))
+#23 10.40   Downloading anyio-4.12.1-py3-none-any.whl.metadata (4.3 kB)
+#23 10.43 Collecting certifi (from httpx==0.27.0->-r requirements.txt (line 20))
+#23 10.45   Downloading certifi-2026.1.4-py3-none-any.whl.metadata (2.5 kB)
+#23 10.51 Collecting httpcore==1.* (from httpx==0.27.0->-r requirements.txt (line 20))
+#23 10.53   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+#23 10.56 Collecting idna (from httpx==0.27.0->-r requirements.txt (line 20))
+#23 10.57   Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+#23 10.60 Collecting sniffio (from httpx==0.27.0->-r requirements.txt (line 20))
+#23 10.62   Downloading sniffio-1.3.1-py3-none-any.whl.metadata (3.9 kB)
+#23 10.76 Collecting httptools>=0.5.0 (from uvicorn[standard]==0.27.1->-r requirements.txt (line 2))
+#23 10.79   Downloading httptools-0.7.1-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+#23 10.88 Collecting pyyaml>=5.1 (from uvicorn[standard]==0.27.1->-r requirements.txt (line 2))
+#23 10.90   Downloading pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+#23 10.98 Collecting uvloop!=0.15.0,!=0.15.1,>=0.14.0 (from uvicorn[standard]==0.27.1->-r requirements.txt (line 2))
+#23 11.00   Downloading uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+#23 11.22 Collecting watchfiles>=0.13 (from uvicorn[standard]==0.27.1->-r requirements.txt (line 2))
+#23 11.24   Downloading watchfiles-1.1.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+#23 11.35 Collecting filelock (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.37   Downloading filelock-3.20.3-py3-none-any.whl.metadata (2.1 kB)
+#23 11.41 Collecting sympy>=1.13.3 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.43   Downloading sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+#23 11.48 Collecting networkx>=2.5.1 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.49   Downloading networkx-3.6.1-py3-none-any.whl.metadata (6.8 kB)
+#23 11.54 Collecting jinja2 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.55   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+#23 11.60 Collecting fsspec>=0.8.5 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.62   Downloading fsspec-2026.1.0-py3-none-any.whl.metadata (10 kB)
+#23 11.66 Collecting cuda-bindings==12.9.4 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.68   Downloading cuda_bindings-12.9.4-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.6 kB)
+#23 11.72 Collecting nvidia-cuda-nvrtc-cu12==12.8.93 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 11.74   Downloading nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+#23 11.78 Collecting nvidia-cuda-runtime-cu12==12.8.90 (from torch>=2.0.0->-r requirements.txt (line 12))    
+#23 11.80   Downloading nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+#23 11.83 Collecting nvidia-cuda-cupti-cu12==12.8.90 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 11.85   Downloading nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+#23 11.89 Collecting nvidia-cudnn-cu12==9.10.2.21 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.90   Downloading nvidia_cudnn_cu12-9.10.2.21-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)     
+#23 11.93 Collecting nvidia-cublas-cu12==12.8.4.1 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 11.96   Downloading nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)     
+#23 11.99 Collecting nvidia-cufft-cu12==11.3.3.83 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.01   Downloading nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+#23 12.04 Collecting nvidia-curand-cu12==10.3.9.90 (from torch>=2.0.0->-r requirements.txt (line 12))        
+#23 12.06   Downloading nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.7 kB)    
+#23 12.09 Collecting nvidia-cusolver-cu12==11.7.3.90 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 12.11   Downloading nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl.metadata (1.8 kB)  
+#23 12.14 Collecting nvidia-cusparse-cu12==12.5.8.93 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 12.16   Downloading nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+#23 12.20 Collecting nvidia-cusparselt-cu12==0.7.1 (from torch>=2.0.0->-r requirements.txt (line 12))        
+#23 12.22   Downloading nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl.metadata (7.0 kB)     
+#23 12.25 Collecting nvidia-nccl-cu12==2.27.5 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.27   Downloading nvidia_nccl_cu12-2.27.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+#23 12.30 Collecting nvidia-nvshmem-cu12==3.4.5 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.33   Downloading nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.1 kB)
+#23 12.36 Collecting nvidia-nvtx-cu12==12.8.90 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.38   Downloading nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.8 kB)
+#23 12.42 Collecting nvidia-nvjitlink-cu12==12.8.93 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 12.44   Downloading nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+#23 12.46 Collecting nvidia-cufile-cu12==1.13.1.3 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.49   Downloading nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.7 kB)
+#23 12.49 INFO: pip is looking at multiple versions of torch to determine which version is compatible with other requirements. This could take a while.
+#23 12.49 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 12.51   Downloading torch-2.9.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (30 kB)
+#23 12.55 Collecting nvidia-nvshmem-cu12==3.3.20 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.57   Downloading nvidia_nvshmem_cu12-3.3.20-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.1 kB)
+#23 12.58 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 12.60   Downloading torch-2.9.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (30 kB)
+#23 12.66   Downloading torch-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (30 kB)
+#23 12.71 Collecting nvidia-nccl-cu12==2.27.3 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.73   Downloading nvidia_nccl_cu12-2.27.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+#23 12.74 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 12.76   Downloading torch-2.7.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (29 kB)
+#23 12.80 Collecting nvidia-cuda-nvrtc-cu12==12.6.77 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 12.82   Downloading nvidia_cuda_nvrtc_cu12-12.6.77-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)   
+#23 12.84 Collecting nvidia-cuda-runtime-cu12==12.6.77 (from torch>=2.0.0->-r requirements.txt (line 12))    
+#23 12.86   Downloading nvidia_cuda_runtime_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+#23 12.87 Collecting nvidia-cuda-cupti-cu12==12.6.80 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 12.89   Downloading nvidia_cuda_cupti_cu12-12.6.80-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+#23 12.90 Collecting nvidia-cudnn-cu12==9.5.1.17 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.92   Downloading nvidia_cudnn_cu12-9.5.1.17-py3-none-manylinux_2_28_x86_64.whl.metadata (1.6 kB)      
+#23 12.93 Collecting nvidia-cublas-cu12==12.6.4.1 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.95   Downloading nvidia_cublas_cu12-12.6.4.1-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+#23 12.96 Collecting nvidia-cufft-cu12==11.3.0.4 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 12.98   Downloading nvidia_cufft_cu12-11.3.0.4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+#23 12.99 Collecting nvidia-curand-cu12==10.3.7.77 (from torch>=2.0.0->-r requirements.txt (line 12))        
+#23 13.01   Downloading nvidia_curand_cu12-10.3.7.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+#23 13.02 Collecting nvidia-cusolver-cu12==11.7.1.2 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 13.03   Downloading nvidia_cusolver_cu12-11.7.1.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+#23 13.04 Collecting nvidia-cusparse-cu12==12.5.4.2 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 13.06   Downloading nvidia_cusparse_cu12-12.5.4.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+#23 13.07 Collecting nvidia-cusparselt-cu12==0.6.3 (from torch>=2.0.0->-r requirements.txt (line 12))        
+#23 13.09   Downloading nvidia_cusparselt_cu12-0.6.3-py3-none-manylinux2014_x86_64.whl.metadata (6.8 kB)     
+#23 13.10 Collecting nvidia-nccl-cu12==2.26.2 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.12   Downloading nvidia_nccl_cu12-2.26.2-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.0 kB)
+#23 13.13 Collecting nvidia-nvtx-cu12==12.6.77 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.15   Downloading nvidia_nvtx_cu12-12.6.77-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.6 kB)
+#23 13.16 Collecting nvidia-nvjitlink-cu12==12.6.85 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 13.18   Downloading nvidia_nvjitlink_cu12-12.6.85-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.5 kB)
+#23 13.19 Collecting nvidia-cufile-cu12==1.11.1.6 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.21   Downloading nvidia_cufile_cu12-1.11.1.6-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (1.5 kB)
+#23 13.21 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 13.23   Downloading torch-2.7.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (29 kB)
+#23 13.29   Downloading torch-2.6.0-cp311-cp311-manylinux1_x86_64.whl.metadata (28 kB)
+#23 13.33 Collecting nvidia-cuda-nvrtc-cu12==12.4.127 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 13.35   Downloading nvidia_cuda_nvrtc_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)  
+#23 13.35 Collecting nvidia-cuda-runtime-cu12==12.4.127 (from torch>=2.0.0->-r requirements.txt (line 12))   
+#23 13.37   Downloading nvidia_cuda_runtime_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+#23 13.38 Collecting nvidia-cuda-cupti-cu12==12.4.127 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 13.40   Downloading nvidia_cuda_cupti_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)  
+#23 13.42 Collecting nvidia-cudnn-cu12==9.1.0.70 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.44   Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)       
+#23 13.45 Collecting nvidia-cublas-cu12==12.4.5.8 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.47   Downloading nvidia_cublas_cu12-12.4.5.8-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)      
+#23 13.47 Collecting nvidia-cufft-cu12==11.2.1.3 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.49   Downloading nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)       
+#23 13.50 Collecting nvidia-curand-cu12==10.3.5.147 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 13.52   Downloading nvidia_curand_cu12-10.3.5.147-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)    
+#23 13.53 Collecting nvidia-cusolver-cu12==11.6.1.9 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 13.55   Downloading nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)    
+#23 13.56 Collecting nvidia-cusparse-cu12==12.3.1.170 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 13.58   Downloading nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)  
+#23 13.59 Collecting nvidia-cusparselt-cu12==0.6.2 (from torch>=2.0.0->-r requirements.txt (line 12))        
+#23 13.61   Downloading nvidia_cusparselt_cu12-0.6.2-py3-none-manylinux2014_x86_64.whl.metadata (6.8 kB)     
+#23 13.62 Collecting nvidia-nccl-cu12==2.21.5 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.64   Downloading nvidia_nccl_cu12-2.21.5-py3-none-manylinux2014_x86_64.whl.metadata (1.8 kB)
+#23 13.65 Collecting nvidia-nvtx-cu12==12.4.127 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 13.67   Downloading nvidia_nvtx_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.7 kB)        
+#23 13.68 Collecting nvidia-nvjitlink-cu12==12.4.127 (from torch>=2.0.0->-r requirements.txt (line 12))      
+#23 13.70   Downloading nvidia_nvjitlink_cu12-12.4.127-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)   
+#23 13.71 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 13.73   Downloading torch-2.5.1-cp311-cp311-manylinux1_x86_64.whl.metadata (28 kB)
+#23 13.76 INFO: pip is still looking at multiple versions of torch to determine which version is compatible with other requirements. This could take a while.
+#23 13.79   Downloading torch-2.5.0-cp311-cp311-manylinux1_x86_64.whl.metadata (28 kB)
+#23 13.84   Downloading torch-2.4.1-cp311-cp311-manylinux1_x86_64.whl.metadata (26 kB)
+#23 13.89 Collecting nvidia-cuda-nvrtc-cu12==12.1.105 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 13.91   Downloading nvidia_cuda_nvrtc_cu12-12.1.105-py3-none-manylinux1_x86_64.whl.metadata (1.5 kB)     
+#23 13.92 Collecting nvidia-cuda-runtime-cu12==12.1.105 (from torch>=2.0.0->-r requirements.txt (line 12))   
+#23 13.94   Downloading nvidia_cuda_runtime_cu12-12.1.105-py3-none-manylinux1_x86_64.whl.metadata (1.5 kB)   
+#23 13.95 Collecting nvidia-cuda-cupti-cu12==12.1.105 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 13.97   Downloading nvidia_cuda_cupti_cu12-12.1.105-py3-none-manylinux1_x86_64.whl.metadata (1.6 kB)     
+#23 13.99 Collecting nvidia-cublas-cu12==12.1.3.1 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.01   Downloading nvidia_cublas_cu12-12.1.3.1-py3-none-manylinux1_x86_64.whl.metadata (1.5 kB)
+#23 14.02 Collecting nvidia-cufft-cu12==11.0.2.54 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.04   Downloading nvidia_cufft_cu12-11.0.2.54-py3-none-manylinux1_x86_64.whl.metadata (1.5 kB)
+#23 14.05 Collecting nvidia-curand-cu12==10.3.2.106 (from torch>=2.0.0->-r requirements.txt (line 12))       
+#23 14.07   Downloading nvidia_curand_cu12-10.3.2.106-py3-none-manylinux1_x86_64.whl.metadata (1.5 kB)       
+#23 14.08 Collecting nvidia-cusolver-cu12==11.4.5.107 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 14.10   Downloading nvidia_cusolver_cu12-11.4.5.107-py3-none-manylinux1_x86_64.whl.metadata (1.6 kB)     
+#23 14.11 Collecting nvidia-cusparse-cu12==12.1.0.106 (from torch>=2.0.0->-r requirements.txt (line 12))     
+#23 14.13   Downloading nvidia_cusparse_cu12-12.1.0.106-py3-none-manylinux1_x86_64.whl.metadata (1.6 kB)     
+#23 14.14 Collecting nvidia-nccl-cu12==2.20.5 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.16   Downloading nvidia_nccl_cu12-2.20.5-py3-none-manylinux2014_x86_64.whl.metadata (1.8 kB)
+#23 14.17 Collecting nvidia-nvtx-cu12==12.1.105 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.19   Downloading nvidia_nvtx_cu12-12.1.105-py3-none-manylinux1_x86_64.whl.metadata (1.7 kB)
+#23 14.20 Collecting torch>=2.0.0 (from -r requirements.txt (line 12))
+#23 14.22   Downloading torch-2.4.0-cp311-cp311-manylinux1_x86_64.whl.metadata (26 kB)
+#23 14.27   Downloading torch-2.3.1-cp311-cp311-manylinux1_x86_64.whl.metadata (26 kB)
+#23 14.32 Collecting nvidia-cudnn-cu12==8.9.2.26 (from torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.34   Downloading nvidia_cudnn_cu12-8.9.2.26-py3-none-manylinux1_x86_64.whl.metadata (1.6 kB)
+#23 14.39 Collecting nvidia-nvjitlink-cu12 (from nvidia-cusolver-cu12==11.4.5.107->torch>=2.0.0->-r requirements.txt (line 12))
+#23 14.40   Downloading nvidia_nvjitlink_cu12-12.9.86-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl.metadata (1.7 kB)
+#23 14.47 Collecting torchaudio>=2.0.0 (from -r requirements.txt (line 13))
+#23 14.49   Downloading torchaudio-2.9.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.9 kB)
+#23 14.52 INFO: This is taking longer than usual. You might need to provide the dependency resolver with stricter constraints to reduce runtime. See https://pip.pypa.io/warnings/backtracking for guidance. If you want to abort this run, press Ctrl + C.
+#23 14.55   Downloading torchaudio-2.9.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.9 kB)
+#23 14.60   Downloading torchaudio-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (7.2 kB)
+#23 14.67   Downloading torchaudio-2.7.1-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+#23 14.73   Downloading torchaudio-2.7.0-cp311-cp311-manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+#23 14.78   Downloading torchaudio-2.6.0-cp311-cp311-manylinux1_x86_64.whl.metadata (6.6 kB)
+#23 14.84   Downloading torchaudio-2.5.1-cp311-cp311-manylinux1_x86_64.whl.metadata (6.4 kB)
+#23 14.90   Downloading torchaudio-2.5.0-cp311-cp311-manylinux1_x86_64.whl.metadata (6.4 kB)
+#23 14.97   Downloading torchaudio-2.4.1-cp311-cp311-manylinux1_x86_64.whl.metadata (6.4 kB)
+#23 15.01   Downloading torchaudio-2.4.0-cp311-cp311-manylinux1_x86_64.whl.metadata (6.4 kB)
+#23 15.07   Downloading torchaudio-2.3.1-cp311-cp311-manylinux1_x86_64.whl.metadata (6.4 kB)
+#23 15.18 Collecting prompt-toolkit>=3.0.36 (from click-repl>=0.2.0->celery==5.3.6->celery[redis]==5.3.6->-r requirements.txt (line 8))
+#23 15.20   Downloading prompt_toolkit-3.0.52-py3-none-any.whl.metadata (6.4 kB)
+#23 15.24 Collecting six>=1.9.0 (from ecdsa!=0.15->python-jose==3.3.0->-r requirements.txt (line 19))        
+#23 15.26   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+#23 15.38 Collecting amqp<6.0.0,>=5.1.1 (from kombu<6.0,>=5.3.4->celery==5.3.6->celery[redis]==5.3.6->-r requirements.txt (line 8))
+#23 15.40   Downloading amqp-5.3.1-py3-none-any.whl.metadata (8.9 kB)
+#23 15.44 Collecting packaging (from kombu<6.0,>=5.3.4->celery==5.3.6->celery[redis]==5.3.6->-r requirements.txt (line 8))
+#23 15.46   Downloading packaging-26.0-py3-none-any.whl.metadata (3.3 kB)
+#23 15.79 Collecting MarkupSafe>=2.0 (from jinja2->torch>=2.0.0->-r requirements.txt (line 12))
+#23 15.80   Downloading markupsafe-3.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+#23 15.96 Collecting llvmlite<0.47,>=0.46.0dev0 (from numba->openai-whisper==20231117->-r requirements.txt (line 11))
+#23 15.98   Downloading llvmlite-0.46.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.0 kB)
+#23 16.00 Collecting numpy (from openai-whisper==20231117->-r requirements.txt (line 11))
+#23 16.02   Downloading numpy-2.3.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+#23 16.03      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.1/62.1 kB 126.8 MB/s eta 0:00:00
+#23 16.12 Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch>=2.0.0->-r requirements.txt (line 12))    
+#23 16.14   Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+#23 16.99 Collecting regex>=2022.1.18 (from tiktoken->openai-whisper==20231117->-r requirements.txt (line 11))
+#23 17.01   Downloading regex-2026.1.15-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+#23 17.02      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.5/40.5 kB 266.3 MB/s eta 0:00:00
+#23 17.08 Collecting requests>=2.26.0 (from tiktoken->openai-whisper==20231117->-r requirements.txt (line 11))
+#23 17.10   Downloading requests-2.32.5-py3-none-any.whl.metadata (4.9 kB)
+#23 17.24 Collecting wcwidth (from prompt-toolkit>=3.0.36->click-repl>=0.2.0->celery==5.3.6->celery[redis]==5.3.6->-r requirements.txt (line 8))
+#23 17.27   Downloading wcwidth-0.5.3-py3-none-any.whl.metadata (30 kB)
+#23 17.47 Collecting charset_normalizer<4,>=2 (from requests>=2.26.0->tiktoken->openai-whisper==20231117->-r requirements.txt (line 11))
+#23 17.49   Downloading charset_normalizer-3.4.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+#23 17.59 Collecting urllib3<3,>=1.21.1 (from requests>=2.26.0->tiktoken->openai-whisper==20231117->-r requirements.txt (line 11))
+#23 17.61   Downloading urllib3-2.6.3-py3-none-any.whl.metadata (6.9 kB)
+#23 17.78 Downloading fastapi-0.109.2-py3-none-any.whl (92 kB)
+#23 17.78    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 92.1/92.1 kB 39.0 MB/s eta 0:00:00
+#23 17.80 Downloading uvicorn-0.27.1-py3-none-any.whl (60 kB)
+#23 17.81    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.8/60.8 kB 21.1 MB/s eta 0:00:00
+#23 17.83 Downloading python_multipart-0.0.9-py3-none-any.whl (22 kB)
+#23 17.85 Downloading SQLAlchemy-2.0.27-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.2 MB)  
+#23 18.02    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 20.0 MB/s eta 0:00:00
+#23 18.03 Downloading alembic-1.13.1-py3-none-any.whl (233 kB)
+#23 18.05    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 233.4/233.4 kB 22.0 MB/s eta 0:00:00
+#23 18.07 Downloading asyncpg-0.29.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.8 MB)     
+#23 18.23    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.8/2.8 MB 18.3 MB/s eta 0:00:00
+#23 18.25 Downloading psycopg2_binary-2.9.9-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+#23 18.40    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 21.0 MB/s eta 0:00:00
+#23 18.42 Downloading celery-5.3.6-py3-none-any.whl (422 kB)
+#23 18.46    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 422.0/422.0 kB 13.6 MB/s eta 0:00:00
+#23 18.48 Downloading redis-5.0.2-py3-none-any.whl (251 kB)
+#23 18.51    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 251.7/251.7 kB 9.0 MB/s eta 0:00:00
+#23 18.54 Downloading websockets-12.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (130 kB)
+#23 18.55    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.9/130.9 kB 14.0 MB/s eta 0:00:00
+#23 18.57 Downloading ffmpeg_python-0.2.0-py3-none-any.whl (25 kB)
+#23 18.59 Downloading pydantic-2.6.1-py3-none-any.whl (394 kB)
+#23 18.61    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 394.8/394.8 kB 19.4 MB/s eta 0:00:00
+#23 18.63 Downloading pydantic_settings-2.1.0-py3-none-any.whl (11 kB)
+#23 18.66 Downloading python_dotenv-1.0.1-py3-none-any.whl (19 kB)
+#23 18.68 Downloading aiofiles-23.2.1-py3-none-any.whl (15 kB)
+#23 18.70 Downloading python_jose-3.3.0-py2.py3-none-any.whl (33 kB)
+#23 18.72 Downloading httpx-0.27.0-py3-none-any.whl (75 kB)
+#23 18.72    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 75.6/75.6 kB 14.4 MB/s eta 0:00:00
+#23 18.75 Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+#23 18.75    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.8/78.8 kB 278.6 MB/s eta 0:00:00
+#23 18.77 Downloading pydantic_core-2.16.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+#23 18.88    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 19.3 MB/s eta 0:00:00
+#23 18.90 Downloading torch-2.3.1-cp311-cp311-manylinux1_x86_64.whl (779.2 MB)
+#23 ...
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 38.39 Get:190 http://deb.debian.org/debian trixie/main amd64 libwayland-server0 amd64 1.23.1-3 [34.4 kB] 
+#16 38.41 Get:191 http://deb.debian.org/debian trixie/main amd64 libgbm1 amd64 25.0.7-2 [44.4 kB]
+#16 38.44 Get:192 http://deb.debian.org/debian trixie/main amd64 libgl1-mesa-dri amd64 25.0.7-2 [46.1 kB]
+#16 38.46 Get:193 http://deb.debian.org/debian trixie/main amd64 libglx-mesa0 amd64 25.0.7-2 [143 kB]        
+#16 38.49 Get:194 http://deb.debian.org/debian trixie/main amd64 libglx0 amd64 1.7.0-1+b2 [34.9 kB]
+#16 38.51 Get:195 http://deb.debian.org/debian trixie/main amd64 libgl1 amd64 1.7.0-1+b2 [89.5 kB]
+#16 38.54 Get:196 http://deb.debian.org/debian trixie/main amd64 libiec61883-0 amd64 1.2.0-7 [30.6 kB]       
+#16 38.56 Get:197 http://deb.debian.org/debian trixie/main amd64 libjack-jackd2-0 amd64 1.9.22~dfsg-4 [287 kB]
+#16 38.61 Get:198 http://deb.debian.org/debian trixie/main amd64 libopenal-data all 1:1.24.2-1 [168 kB]      
+#16 38.65 Get:199 http://deb.debian.org/debian trixie/main amd64 libopenal1 amd64 1:1.24.2-1 [637 kB]        
+#16 38.72 Get:200 http://deb.debian.org/debian trixie/main amd64 libwayland-client0 amd64 1.23.1-3 [26.8 kB]
+#16 38.74 Get:201 http://deb.debian.org/debian trixie/main amd64 libdecor-0-0 amd64 0.2.2-2 [15.5 kB]        
+#16 38.76 Get:202 http://deb.debian.org/debian trixie/main amd64 libwayland-cursor0 amd64 1.23.1-3 [11.9 kB]
+#16 38.78 Get:203 http://deb.debian.org/debian trixie/main amd64 libwayland-egl1 amd64 1.23.1-3 [5860 B]     
+#16 38.81 Get:204 http://deb.debian.org/debian trixie/main amd64 libxcursor1 amd64 1:1.2.3-1 [39.7 kB]       
+#16 38.83 Get:205 http://deb.debian.org/debian trixie/main amd64 libxi6 amd64 2:1.8.2-1 [78.9 kB]
+#16 38.86 Get:206 http://deb.debian.org/debian trixie/main amd64 xkb-data all 2.42-1 [790 kB]
+#16 38.91 Get:207 http://deb.debian.org/debian trixie/main amd64 libxkbcommon0 amd64 1.7.0-2 [113 kB]        
+#16 38.94 Get:208 http://deb.debian.org/debian trixie/main amd64 libxrandr2 amd64 2:1.5.4-1+b3 [36.3 kB]
+#16 38.97 Get:209 http://deb.debian.org/debian trixie/main amd64 x11-common all 1:7.7+24+deb13u1 [217 kB]
+#16 39.00 Get:210 http://deb.debian.org/debian trixie/main amd64 libxss1 amd64 1:1.2.3-1+b3 [17.0 kB]        
+#16 39.03 Get:211 http://deb.debian.org/debian trixie/main amd64 libsdl2-2.0-0 amd64 2.32.4+dfsg-1 [669 kB]
+#16 39.08 Get:212 http://deb.debian.org/debian trixie/main amd64 libxcb-shape0 amd64 1.17.0-2+b1 [106 kB]    
+#16 39.12 Get:213 http://deb.debian.org/debian trixie/main amd64 libxv1 amd64 2:1.0.11-1.1+b3 [23.4 kB]      
+#16 39.14 Get:214 http://deb.debian.org/debian trixie/main amd64 libavdevice61 amd64 7:7.1.3-0+deb13u1 [119 kB]
+#16 39.17 Get:215 http://deb.debian.org/debian trixie/main amd64 ffmpeg amd64 7:7.1.3-0+deb13u1 [1995 kB]    
+#16 39.43 debconf: unable to initialize frontend: Dialog
+#16 39.43 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#16 39.43 debconf: falling back to frontend: Readline
+#16 39.43 debconf: unable to initialize frontend: Readline
+#16 39.43 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 215.)
+#16 39.43 debconf: falling back to frontend: Teletype
+#16 39.43 debconf: unable to initialize frontend: Teletype
+#16 39.43 debconf: (This frontend requires a controlling tty.)
+#16 39.43 debconf: falling back to frontend: Noninteractive
+#16 43.68 Preconfiguring packages ...
+#16 ...
+
+#20 [frontend deps 5/5] RUN   if [ -f package-lock.json ]; then npm ci;   else npm install;   fi
+#20 36.70 npm warn deprecated next@14.1.0: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/security-update-2025-12-11 for more details.
+#20 36.97
+#20 36.97 added 383 packages, and audited 384 packages in 37s
+#20 36.97
+#20 36.97 148 packages are looking for funding
+#20 36.97   run `npm fund` for details
+#20 37.17
+#20 37.17 7 vulnerabilities (3 moderate, 3 high, 1 critical)
+#20 37.17
+#20 37.17 To address issues that do not require attention, run:
+#20 37.17   npm audit fix
+#20 37.17
+#20 37.17 To address all issues (including breaking changes), run:
+#20 37.17   npm audit fix --force
+#20 37.17
+#20 37.17 Run `npm audit` for details.
+#20 37.17 npm notice
+#20 37.17 npm notice New major version of npm available! 10.8.2 -> 11.8.0
+#20 37.17 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.8.0
+#20 37.17 npm notice To update run: npm install -g npm@11.8.0
+#20 37.17 npm notice
+#20 DONE 38.5s
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 44.61 Fetched 135 MB in 34s (3975 kB/s)
+#16 44.65 Selecting previously unselected package libexpat1:amd64.
+(Reading database ... 5645 files and directories currently installed.)
+#16 44.65 Preparing to unpack .../000-libexpat1_2.7.1-2_amd64.deb ...
+#16 44.67 Unpacking libexpat1:amd64 (2.7.1-2) ...
+#16 44.73 Selecting previously unselected package libbrotli1:amd64.
+#16 44.73 Preparing to unpack .../001-libbrotli1_1.1.0-2+b7_amd64.deb ...
+#16 44.73 Unpacking libbrotli1:amd64 (1.1.0-2+b7) ...
+#16 44.80 Selecting previously unselected package libkrb5support0:amd64.
+#16 44.80 Preparing to unpack .../002-libkrb5support0_1.21.3-5_amd64.deb ...
+#16 44.81 Unpacking libkrb5support0:amd64 (1.21.3-5) ...
+#16 44.86 Selecting previously unselected package libcom-err2:amd64.
+#16 44.86 Preparing to unpack .../003-libcom-err2_1.47.2-3+b7_amd64.deb ...
+#16 44.87 Unpacking libcom-err2:amd64 (1.47.2-3+b7) ...
+#16 44.92 Selecting previously unselected package libk5crypto3:amd64.
+#16 44.92 Preparing to unpack .../004-libk5crypto3_1.21.3-5_amd64.deb ...
+#16 44.92 Unpacking libk5crypto3:amd64 (1.21.3-5) ...
+#16 44.98 Selecting previously unselected package libkeyutils1:amd64.
+#16 44.98 Preparing to unpack .../005-libkeyutils1_1.6.3-6_amd64.deb ...
+#16 44.99 Unpacking libkeyutils1:amd64 (1.6.3-6) ...
+#16 45.04 Selecting previously unselected package libkrb5-3:amd64.
+#16 45.04 Preparing to unpack .../006-libkrb5-3_1.21.3-5_amd64.deb ...
+#16 45.04 Unpacking libkrb5-3:amd64 (1.21.3-5) ...
+#16 45.11 Selecting previously unselected package libgssapi-krb5-2:amd64.
+#16 45.11 Preparing to unpack .../007-libgssapi-krb5-2_1.21.3-5_amd64.deb ...
+#16 45.12 Unpacking libgssapi-krb5-2:amd64 (1.21.3-5) ...
+#16 45.18 Selecting previously unselected package libunistring5:amd64.
+#16 45.18 Preparing to unpack .../008-libunistring5_1.3-2_amd64.deb ...
+#16 45.19 Unpacking libunistring5:amd64 (1.3-2) ...
+#16 45.27 Selecting previously unselected package libidn2-0:amd64.
+#16 45.27 Preparing to unpack .../009-libidn2-0_2.3.8-2_amd64.deb ...
+#16 45.27 Unpacking libidn2-0:amd64 (2.3.8-2) ...
+#16 45.33 Selecting previously unselected package libsasl2-modules-db:amd64.
+#16 45.33 Preparing to unpack .../010-libsasl2-modules-db_2.1.28+dfsg1-9_amd64.deb ...
+#16 45.33 Unpacking libsasl2-modules-db:amd64 (2.1.28+dfsg1-9) ...
+#16 45.41 Selecting previously unselected package libsasl2-2:amd64.
+#16 45.41 Preparing to unpack .../011-libsasl2-2_2.1.28+dfsg1-9_amd64.deb ...
+#16 45.42 Unpacking libsasl2-2:amd64 (2.1.28+dfsg1-9) ...
+#16 45.48 Selecting previously unselected package libldap2:amd64.
+#16 45.48 Preparing to unpack .../012-libldap2_2.6.10+dfsg-1_amd64.deb ...
+#16 45.48 Unpacking libldap2:amd64 (2.6.10+dfsg-1) ...
+#16 45.55 Selecting previously unselected package libnghttp2-14:amd64.
+#16 45.55 Preparing to unpack .../013-libnghttp2-14_1.64.0-1.1_amd64.deb ...
+#16 45.55 Unpacking libnghttp2-14:amd64 (1.64.0-1.1) ...
+#16 45.62 Selecting previously unselected package libnghttp3-9:amd64.
+#16 45.62 Preparing to unpack .../014-libnghttp3-9_1.8.0-1_amd64.deb ...
+#16 45.62 Unpacking libnghttp3-9:amd64 (1.8.0-1) ...
+#16 45.68 Selecting previously unselected package libpsl5t64:amd64.
+#16 45.68 Preparing to unpack .../015-libpsl5t64_0.21.2-1.1+b1_amd64.deb ...
+#16 45.68 Unpacking libpsl5t64:amd64 (0.21.2-1.1+b1) ...
+#16 45.75 Selecting previously unselected package libp11-kit0:amd64.
+#16 45.75 Preparing to unpack .../016-libp11-kit0_0.25.5-3_amd64.deb ...
+#16 45.76 Unpacking libp11-kit0:amd64 (0.25.5-3) ...
+#16 45.82 Selecting previously unselected package libtasn1-6:amd64.
+#16 45.82 Preparing to unpack .../017-libtasn1-6_4.20.0-2_amd64.deb ...
+#16 45.83 Unpacking libtasn1-6:amd64 (4.20.0-2) ...
+#16 45.89 Selecting previously unselected package libgnutls30t64:amd64.
+#16 45.89 Preparing to unpack .../018-libgnutls30t64_3.8.9-3+deb13u1_amd64.deb ...
+#16 45.89 Unpacking libgnutls30t64:amd64 (3.8.9-3+deb13u1) ...
+#16 45.99 Selecting previously unselected package librtmp1:amd64.
+#16 45.99 Preparing to unpack .../019-librtmp1_2.4+20151223.gitfa8646d.1-2+b5_amd64.deb ...
+#16 46.00 Unpacking librtmp1:amd64 (2.4+20151223.gitfa8646d.1-2+b5) ...
+#16 46.05 Selecting previously unselected package libssh2-1t64:amd64.
+#16 46.05 Preparing to unpack .../020-libssh2-1t64_1.11.1-1_amd64.deb ...
+#16 46.06 Unpacking libssh2-1t64:amd64 (1.11.1-1) ...
+#16 46.15 Selecting previously unselected package libcurl4t64:amd64.
+#16 46.15 Preparing to unpack .../021-libcurl4t64_8.14.1-2+deb13u2_amd64.deb ...
+#16 46.16 Unpacking libcurl4t64:amd64 (8.14.1-2+deb13u2) ...
+#16 46.21 Selecting previously unselected package curl.
+#16 46.21 Preparing to unpack .../022-curl_8.14.1-2+deb13u2_amd64.deb ...
+#16 46.22 Unpacking curl (8.14.1-2+deb13u2) ...
+#16 46.30 Selecting previously unselected package libaom3:amd64.
+#16 46.31 Preparing to unpack .../023-libaom3_3.12.1-1_amd64.deb ...
+#16 46.31 Unpacking libaom3:amd64 (3.12.1-1) ...
+#16 46.44 Selecting previously unselected package libdrm-common.
+#16 46.44 Preparing to unpack .../024-libdrm-common_2.4.124-2_all.deb ...
+#16 46.44 Unpacking libdrm-common (2.4.124-2) ...
+#16 46.51 Selecting previously unselected package libdrm2:amd64.
+#16 46.51 Preparing to unpack .../025-libdrm2_2.4.124-2_amd64.deb ...
+#16 46.52 Unpacking libdrm2:amd64 (2.4.124-2) ...
+#16 46.57 Selecting previously unselected package libva2:amd64.
+#16 46.57 Preparing to unpack .../026-libva2_2.22.0-3_amd64.deb ...
+#16 46.58 Unpacking libva2:amd64 (2.22.0-3) ...
+#16 46.63 Selecting previously unselected package libva-drm2:amd64.
+#16 46.63 Preparing to unpack .../027-libva-drm2_2.22.0-3_amd64.deb ...
+#16 46.64 Unpacking libva-drm2:amd64 (2.22.0-3) ...
+#16 46.70 Selecting previously unselected package libxau6:amd64.
+#16 46.70 Preparing to unpack .../028-libxau6_1%3a1.0.11-1_amd64.deb ...
+#16 46.70 Unpacking libxau6:amd64 (1:1.0.11-1) ...
+#16 46.76 Selecting previously unselected package libxdmcp6:amd64.
+#16 46.76 Preparing to unpack .../029-libxdmcp6_1%3a1.1.5-1_amd64.deb ...
+#16 46.76 Unpacking libxdmcp6:amd64 (1:1.1.5-1) ...
+#16 46.82 Selecting previously unselected package libxcb1:amd64.
+#16 46.82 Preparing to unpack .../030-libxcb1_1.17.0-2+b1_amd64.deb ...
+#16 46.83 Unpacking libxcb1:amd64 (1.17.0-2+b1) ...
+#16 46.87 Selecting previously unselected package libx11-data.
+#16 46.87 Preparing to unpack .../031-libx11-data_2%3a1.8.12-1_all.deb ...
+#16 46.88 Unpacking libx11-data (2:1.8.12-1) ...
+#16 46.98 Selecting previously unselected package libx11-6:amd64.
+#16 46.98 Preparing to unpack .../032-libx11-6_2%3a1.8.12-1_amd64.deb ...
+#16 46.99 Unpacking libx11-6:amd64 (2:1.8.12-1) ...
+#16 47.07 Selecting previously unselected package libx11-xcb1:amd64.
+#16 47.07 Preparing to unpack .../033-libx11-xcb1_2%3a1.8.12-1_amd64.deb ...
+#16 47.07 Unpacking libx11-xcb1:amd64 (2:1.8.12-1) ...
+#16 47.13 Selecting previously unselected package libxcb-dri3-0:amd64.
+#16 47.13 Preparing to unpack .../034-libxcb-dri3-0_1.17.0-2+b1_amd64.deb ...
+#16 47.14 Unpacking libxcb-dri3-0:amd64 (1.17.0-2+b1) ...
+#16 47.20 Selecting previously unselected package libxext6:amd64.
+#16 47.20 Preparing to unpack .../035-libxext6_2%3a1.3.4-1+b3_amd64.deb ...
+#16 47.21 Unpacking libxext6:amd64 (2:1.3.4-1+b3) ...
+#16 47.27 Selecting previously unselected package libxfixes3:amd64.
+#16 47.27 Preparing to unpack .../036-libxfixes3_1%3a6.0.0-2+b4_amd64.deb ...
+#16 47.27 Unpacking libxfixes3:amd64 (1:6.0.0-2+b4) ...
+#16 47.33 Selecting previously unselected package libva-x11-2:amd64.
+#16 47.33 Preparing to unpack .../037-libva-x11-2_2.22.0-3_amd64.deb ...
+#16 47.34 Unpacking libva-x11-2:amd64 (2.22.0-3) ...
+#16 47.40 Selecting previously unselected package libvdpau1:amd64.
+#16 47.40 Preparing to unpack .../038-libvdpau1_1.5-3+b1_amd64.deb ...
+#16 47.42 Unpacking libvdpau1:amd64 (1.5-3+b1) ...
+#16 47.47 Selecting previously unselected package libvpl2.
+#16 47.47 Preparing to unpack .../039-libvpl2_1%3a2.14.0-1+b1_amd64.deb ...
+#16 47.48 Unpacking libvpl2 (1:2.14.0-1+b1) ...
+#16 47.54 Selecting previously unselected package ocl-icd-libopencl1:amd64.
+#16 47.54 Preparing to unpack .../040-ocl-icd-libopencl1_2.3.3-1_amd64.deb ...
+#16 47.55 Unpacking ocl-icd-libopencl1:amd64 (2.3.3-1) ...
+#16 47.61 Selecting previously unselected package libavutil59:amd64.
+#16 47.61 Preparing to unpack .../041-libavutil59_7%3a7.1.3-0+deb13u1_amd64.deb ...
+#16 47.62 Unpacking libavutil59:amd64 (7:7.1.3-0+deb13u1) ...
+#16 47.69 Selecting previously unselected package libpng16-16t64:amd64.
+#16 47.69 Preparing to unpack .../042-libpng16-16t64_1.6.48-1+deb13u1_amd64.deb ...
+#16 47.70 Unpacking libpng16-16t64:amd64 (1.6.48-1+deb13u1) ...
+#16 47.77 Selecting previously unselected package libfreetype6:amd64.
+#16 47.77 Preparing to unpack .../043-libfreetype6_2.13.3+dfsg-1_amd64.deb ...
+#16 47.78 Unpacking libfreetype6:amd64 (2.13.3+dfsg-1) ...
+#16 47.87 Selecting previously unselected package fonts-dejavu-mono.
+#16 47.87 Preparing to unpack .../044-fonts-dejavu-mono_2.37-8_all.deb ...
+#16 47.87 Unpacking fonts-dejavu-mono (2.37-8) ...
+#16 47.96 Selecting previously unselected package fonts-dejavu-core.
+#16 47.96 Preparing to unpack .../045-fonts-dejavu-core_2.37-8_all.deb ...
+#16 47.98 Unpacking fonts-dejavu-core (2.37-8) ...
+#16 48.07 Selecting previously unselected package fontconfig-config.
+#16 48.07 Preparing to unpack .../046-fontconfig-config_2.15.0-2.3_amd64.deb ...
+#16 48.08 Unpacking fontconfig-config (2.15.0-2.3) ...
+#16 48.14 Selecting previously unselected package libfontconfig1:amd64.
+#16 48.15 Preparing to unpack .../047-libfontconfig1_2.15.0-2.3_amd64.deb ...
+#16 48.15 Unpacking libfontconfig1:amd64 (2.15.0-2.3) ...
+#16 48.22 Selecting previously unselected package libpixman-1-0:amd64.
+#16 48.22 Preparing to unpack .../048-libpixman-1-0_0.44.0-3_amd64.deb ...
+#16 48.22 Unpacking libpixman-1-0:amd64 (0.44.0-3) ...
+#16 48.31 Selecting previously unselected package libxcb-render0:amd64.
+#16 48.31 Preparing to unpack .../049-libxcb-render0_1.17.0-2+b1_amd64.deb ...
+#16 48.32 Unpacking libxcb-render0:amd64 (1.17.0-2+b1) ...
+#16 48.38 Selecting previously unselected package libxcb-shm0:amd64.
+#16 48.38 Preparing to unpack .../050-libxcb-shm0_1.17.0-2+b1_amd64.deb ...
+#16 48.39 Unpacking libxcb-shm0:amd64 (1.17.0-2+b1) ...
+#16 48.44 Selecting previously unselected package libxrender1:amd64.
+#16 48.45 Preparing to unpack .../051-libxrender1_1%3a0.9.12-1_amd64.deb ...
+#16 48.45 Unpacking libxrender1:amd64 (1:0.9.12-1) ...
+#16 48.78 Selecting previously unselected package libcairo2:amd64.
+#16 48.78 Preparing to unpack .../052-libcairo2_1.18.4-1+b1_amd64.deb ...
+#16 49.23 Unpacking libcairo2:amd64 (1.18.4-1+b1) ...
+#16 49.49 Selecting previously unselected package libcodec2-1.2:amd64.
+#16 ...
+
+#24 [frontend builder 3/5] COPY --from=deps /app/node_modules ./node_modules
+#24 DONE 3.2s
+
+#25 [frontend builder 4/5] COPY . .
+#25 DONE 0.1s
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 49.50 Preparing to unpack .../053-libcodec2-1.2_1.2.0-3_amd64.deb ...
+#16 49.55 Unpacking libcodec2-1.2:amd64 (1.2.0-3) ...
+#16 ...
+
+#26 [frontend builder 5/5] RUN npm run build
+#26 0.550 
+#26 0.550 > voice2character-frontend@1.0.0 build
+#26 0.550 > next build
+#26 0.550
+#26 1.224    ▲ Next.js 14.1.0
+#26 1.226
+#26 1.240    Creating an optimized production build ...
+#26 ...
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 49.87 Selecting previously unselected package libdav1d7:amd64.
+#16 49.88 Preparing to unpack .../054-libdav1d7_1.5.1-1_amd64.deb ...
+#16 49.88 Unpacking libdav1d7:amd64 (1.5.1-1) ...
+#16 49.96 Selecting previously unselected package libatomic1:amd64.
+#16 49.96 Preparing to unpack .../055-libatomic1_14.2.0-19_amd64.deb ...
+#16 49.96 Unpacking libatomic1:amd64 (14.2.0-19) ...
+#16 50.03 Selecting previously unselected package libglib2.0-0t64:amd64.
+#16 50.03 Preparing to unpack .../056-libglib2.0-0t64_2.84.4-3~deb13u2_amd64.deb ...
+#16 50.04 Unpacking libglib2.0-0t64:amd64 (2.84.4-3~deb13u2) ...
+#16 50.15 Selecting previously unselected package libgsm1:amd64.
+#16 50.15 Preparing to unpack .../057-libgsm1_1.0.22-1+b2_amd64.deb ...
+#16 50.16 Unpacking libgsm1:amd64 (1.0.22-1+b2) ...
+#16 50.22 Selecting previously unselected package libhwy1t64:amd64.
+#16 50.22 Preparing to unpack .../058-libhwy1t64_1.2.0-2+b2_amd64.deb ...
+#16 50.22 Unpacking libhwy1t64:amd64 (1.2.0-2+b2) ...
+#16 50.31 Selecting previously unselected package liblcms2-2:amd64.
+#16 50.31 Preparing to unpack .../059-liblcms2-2_2.16-2_amd64.deb ...
+#16 50.32 Unpacking liblcms2-2:amd64 (2.16-2) ...
+#16 50.38 Selecting previously unselected package libjxl0.11:amd64.
+#16 50.38 Preparing to unpack .../060-libjxl0.11_0.11.1-4_amd64.deb ...
+#16 50.38 Unpacking libjxl0.11:amd64 (0.11.1-4) ...
+#16 50.48 Selecting previously unselected package libmp3lame0:amd64.
+#16 50.48 Preparing to unpack .../061-libmp3lame0_3.100-6+b3_amd64.deb ...
+#16 50.49 Unpacking libmp3lame0:amd64 (3.100-6+b3) ...
+#16 50.54 Selecting previously unselected package libopenjp2-7:amd64.
+#16 50.55 Preparing to unpack .../062-libopenjp2-7_2.5.3-2.1~deb13u1_amd64.deb ...
+#16 50.55 Unpacking libopenjp2-7:amd64 (2.5.3-2.1~deb13u1) ...
+#16 50.63 Selecting previously unselected package libopus0:amd64.
+#16 50.63 Preparing to unpack .../063-libopus0_1.5.2-2_amd64.deb ...
+#16 50.64 Unpacking libopus0:amd64 (1.5.2-2) ...
+#16 50.78 Selecting previously unselected package librav1e0.7:amd64.
+#16 50.78 Preparing to unpack .../064-librav1e0.7_0.7.1-9+b2_amd64.deb ...
+#16 50.79 Unpacking librav1e0.7:amd64 (0.7.1-9+b2) ...
+#16 50.89 Selecting previously unselected package libcairo-gobject2:amd64.
+#16 50.89 Preparing to unpack .../065-libcairo-gobject2_1.18.4-1+b1_amd64.deb ...
+#16 50.89 Unpacking libcairo-gobject2:amd64 (1.18.4-1+b1) ...
+#16 50.95 Selecting previously unselected package libgdk-pixbuf2.0-common.
+#16 50.95 Preparing to unpack .../066-libgdk-pixbuf2.0-common_2.42.12+dfsg-4_all.deb ...
+#16 50.96 Unpacking libgdk-pixbuf2.0-common (2.42.12+dfsg-4) ...
+#16 51.04 Selecting previously unselected package libxml2:amd64.
+#16 51.04 Preparing to unpack .../067-libxml2_2.12.7+dfsg+really2.9.14-2.1+deb13u2_amd64.deb ...
+#16 51.04 Unpacking libxml2:amd64 (2.12.7+dfsg+really2.9.14-2.1+deb13u2) ...
+#16 51.12 Selecting previously unselected package shared-mime-info.
+#16 51.12 Preparing to unpack .../068-shared-mime-info_2.4-5+b2_amd64.deb ...
+#16 51.13 Unpacking shared-mime-info (2.4-5+b2) ...
+#16 51.22 Selecting previously unselected package libjpeg62-turbo:amd64.
+#16 51.22 Preparing to unpack .../069-libjpeg62-turbo_1%3a2.1.5-4_amd64.deb ...
+#16 51.23 Unpacking libjpeg62-turbo:amd64 (1:2.1.5-4) ...
+#16 51.29 Selecting previously unselected package libdeflate0:amd64.
+#16 51.29 Preparing to unpack .../070-libdeflate0_1.23-2_amd64.deb ...
+#16 51.30 Unpacking libdeflate0:amd64 (1.23-2) ...
+#16 51.35 Selecting previously unselected package libjbig0:amd64.
+#16 51.35 Preparing to unpack .../071-libjbig0_2.1-6.1+b2_amd64.deb ...
+#16 51.35 Unpacking libjbig0:amd64 (2.1-6.1+b2) ...
+#16 51.41 Selecting previously unselected package liblerc4:amd64.
+#16 51.41 Preparing to unpack .../072-liblerc4_4.0.0+ds-5_amd64.deb ...
+#16 51.42 Unpacking liblerc4:amd64 (4.0.0+ds-5) ...
+#16 51.47 Selecting previously unselected package libsharpyuv0:amd64.
+#16 51.48 Preparing to unpack .../073-libsharpyuv0_1.5.0-0.1_amd64.deb ...
+#16 51.48 Unpacking libsharpyuv0:amd64 (1.5.0-0.1) ...
+#16 51.53 Selecting previously unselected package libwebp7:amd64.
+#16 51.54 Preparing to unpack .../074-libwebp7_1.5.0-0.1_amd64.deb ...
+#16 51.54 Unpacking libwebp7:amd64 (1.5.0-0.1) ...
+#16 51.60 Selecting previously unselected package libtiff6:amd64.
+#16 51.60 Preparing to unpack .../075-libtiff6_4.7.0-3+deb13u1_amd64.deb ...
+#16 51.61 Unpacking libtiff6:amd64 (4.7.0-3+deb13u1) ...
+#16 51.70 Selecting previously unselected package libgdk-pixbuf-2.0-0:amd64.
+#16 51.70 Preparing to unpack .../076-libgdk-pixbuf-2.0-0_2.42.12+dfsg-4_amd64.deb ...
+#16 51.71 Unpacking libgdk-pixbuf-2.0-0:amd64 (2.42.12+dfsg-4) ...
+#16 51.78 Selecting previously unselected package fontconfig.
+#16 51.78 Preparing to unpack .../077-fontconfig_2.15.0-2.3_amd64.deb ...
+#16 51.78 Unpacking fontconfig (2.15.0-2.3) ...
+#16 51.85 Selecting previously unselected package libfribidi0:amd64.
+#16 51.85 Preparing to unpack .../078-libfribidi0_1.0.16-1_amd64.deb ...
+#16 51.85 Unpacking libfribidi0:amd64 (1.0.16-1) ...
+#16 51.90 Selecting previously unselected package libgraphite2-3:amd64.
+#16 51.90 Preparing to unpack .../079-libgraphite2-3_1.3.14-2+b1_amd64.deb ...
+#16 51.91 Unpacking libgraphite2-3:amd64 (1.3.14-2+b1) ...
+#16 51.96 Selecting previously unselected package libharfbuzz0b:amd64.
+#16 51.97 Preparing to unpack .../080-libharfbuzz0b_10.2.0-1+b1_amd64.deb ...
+#16 51.97 Unpacking libharfbuzz0b:amd64 (10.2.0-1+b1) ...
+#16 52.04 Selecting previously unselected package libthai-data.
+#16 52.04 Preparing to unpack .../081-libthai-data_0.1.29-2_all.deb ...
+#16 52.05 Unpacking libthai-data (0.1.29-2) ...
+#16 52.11 Selecting previously unselected package libdatrie1:amd64.
+#16 52.11 Preparing to unpack .../082-libdatrie1_0.2.13-3+b1_amd64.deb ...
+#16 52.12 Unpacking libdatrie1:amd64 (0.2.13-3+b1) ...
+#16 52.17 Selecting previously unselected package libthai0:amd64.
+#16 52.18 Preparing to unpack .../083-libthai0_0.1.29-2+b1_amd64.deb ...
+#16 52.21 Unpacking libthai0:amd64 (0.1.29-2+b1) ...
+#16 52.26 Selecting previously unselected package libpango-1.0-0:amd64.
+#16 52.26 Preparing to unpack .../084-libpango-1.0-0_1.56.3-1_amd64.deb ...
+#16 52.27 Unpacking libpango-1.0-0:amd64 (1.56.3-1) ...
+#16 52.33 Selecting previously unselected package libpangoft2-1.0-0:amd64.
+#16 52.33 Preparing to unpack .../085-libpangoft2-1.0-0_1.56.3-1_amd64.deb ...
+#16 52.34 Unpacking libpangoft2-1.0-0:amd64 (1.56.3-1) ...
+#16 52.39 Selecting previously unselected package libpangocairo-1.0-0:amd64.
+#16 52.39 Preparing to unpack .../086-libpangocairo-1.0-0_1.56.3-1_amd64.deb ...
+#16 52.40 Unpacking libpangocairo-1.0-0:amd64 (1.56.3-1) ...
+#16 52.45 Selecting previously unselected package librsvg2-2:amd64.
+#16 52.45 Preparing to unpack .../087-librsvg2-2_2.60.0+dfsg-1_amd64.deb ...
+#16 52.46 Unpacking librsvg2-2:amd64 (2.60.0+dfsg-1) ...
+#16 52.59 Selecting previously unselected package libshine3:amd64.
+#16 52.59 Preparing to unpack .../088-libshine3_3.1.1-2+b2_amd64.deb ...
+#16 52.59 Unpacking libshine3:amd64 (3.1.1-2+b2) ...
+#16 52.65 Selecting previously unselected package libsnappy1v5:amd64.
+#16 52.65 Preparing to unpack .../089-libsnappy1v5_1.2.2-1_amd64.deb ...
+#16 52.66 Unpacking libsnappy1v5:amd64 (1.2.2-1) ...
+#16 52.70 Selecting previously unselected package libspeex1:amd64.
+#16 52.70 Preparing to unpack .../090-libspeex1_1.2.1-3_amd64.deb ...
+#16 52.71 Unpacking libspeex1:amd64 (1.2.1-3) ...
+#16 52.76 Selecting previously unselected package libsvtav1enc2:amd64.
+#16 52.76 Preparing to unpack .../091-libsvtav1enc2_2.3.0+dfsg-1_amd64.deb ...
+#16 52.77 Unpacking libsvtav1enc2:amd64 (2.3.0+dfsg-1) ...
+#16 52.92 Selecting previously unselected package libgomp1:amd64.
+#16 52.92 Preparing to unpack .../092-libgomp1_14.2.0-19_amd64.deb ...
+#16 52.93 Unpacking libgomp1:amd64 (14.2.0-19) ...
+#16 52.98 Selecting previously unselected package libsoxr0:amd64.
+#16 52.98 Preparing to unpack .../093-libsoxr0_0.1.3-4+b2_amd64.deb ...
+#16 52.99 Unpacking libsoxr0:amd64 (0.1.3-4+b2) ...
+#16 53.05 Selecting previously unselected package libswresample5:amd64.
+#16 53.05 Preparing to unpack .../094-libswresample5_7%3a7.1.3-0+deb13u1_amd64.deb ...
+#16 53.06 Unpacking libswresample5:amd64 (7:7.1.3-0+deb13u1) ...
+#16 53.11 Selecting previously unselected package libtheoradec1:amd64.
+#16 53.11 Preparing to unpack .../095-libtheoradec1_1.2.0~alpha1+dfsg-6_amd64.deb ...
+#16 53.12 Unpacking libtheoradec1:amd64 (1.2.0~alpha1+dfsg-6) ...
+#16 53.17 Selecting previously unselected package libogg0:amd64.
+#16 53.17 Preparing to unpack .../096-libogg0_1.3.5-3+b2_amd64.deb ...
+#16 53.18 Unpacking libogg0:amd64 (1.3.5-3+b2) ...
+#16 53.23 Selecting previously unselected package libtheoraenc1:amd64.
+#16 53.23 Preparing to unpack .../097-libtheoraenc1_1.2.0~alpha1+dfsg-6_amd64.deb ...
+#16 53.23 Unpacking libtheoraenc1:amd64 (1.2.0~alpha1+dfsg-6) ...
+#16 53.29 Selecting previously unselected package libtwolame0:amd64.
+#16 53.29 Preparing to unpack .../098-libtwolame0_0.4.0-2+b2_amd64.deb ...
+#16 53.30 Unpacking libtwolame0:amd64 (0.4.0-2+b2) ...
+#16 53.35 Selecting previously unselected package libvorbis0a:amd64.
+#16 53.36 Preparing to unpack .../099-libvorbis0a_1.3.7-3_amd64.deb ...
+#16 53.36 Unpacking libvorbis0a:amd64 (1.3.7-3) ...
+#16 53.41 Selecting previously unselected package libvorbisenc2:amd64.
+#16 53.41 Preparing to unpack .../100-libvorbisenc2_1.3.7-3_amd64.deb ...
+#16 53.42 Unpacking libvorbisenc2:amd64 (1.3.7-3) ...
+#16 53.48 Selecting previously unselected package libvpx9:amd64.
+#16 53.48 Preparing to unpack .../101-libvpx9_1.15.0-2.1_amd64.deb ...
+#16 53.49 Unpacking libvpx9:amd64 (1.15.0-2.1) ...
+#16 53.58 Selecting previously unselected package libwebpmux3:amd64.
+#16 53.58 Preparing to unpack .../102-libwebpmux3_1.5.0-0.1_amd64.deb ...
+#16 53.59 Unpacking libwebpmux3:amd64 (1.5.0-0.1) ...
+#16 53.64 Selecting previously unselected package libx264-164:amd64.
+#16 53.64 Preparing to unpack .../103-libx264-164_2%3a0.164.3108+git31e19f9-2+b1_amd64.deb ...
+#16 53.65 Unpacking libx264-164:amd64 (2:0.164.3108+git31e19f9-2+b1) ...
+#16 53.72 Selecting previously unselected package libnuma1:amd64.
+#16 53.72 Preparing to unpack .../104-libnuma1_2.0.19-1_amd64.deb ...
+#16 53.73 Unpacking libnuma1:amd64 (2.0.19-1) ...
+#16 53.78 Selecting previously unselected package libx265-215:amd64.
+#16 53.78 Preparing to unpack .../105-libx265-215_4.1-2_amd64.deb ...
+#16 53.79 Unpacking libx265-215:amd64 (4.1-2) ...
+#16 53.91 Selecting previously unselected package libxvidcore4:amd64.
+#16 53.91 Preparing to unpack .../106-libxvidcore4_2%3a1.3.7-1+b2_amd64.deb ...
+#16 53.92 Unpacking libxvidcore4:amd64 (2:1.3.7-1+b2) ...
+#16 53.98 Selecting previously unselected package libzvbi-common.
+#16 53.98 Preparing to unpack .../107-libzvbi-common_0.2.44-1_all.deb ...
+#16 53.99 Unpacking libzvbi-common (0.2.44-1) ...
+#16 54.05 Selecting previously unselected package libzvbi0t64:amd64.
+#16 54.05 Preparing to unpack .../108-libzvbi0t64_0.2.44-1_amd64.deb ...
+#16 54.05 Unpacking libzvbi0t64:amd64 (0.2.44-1) ...
+#16 54.13 Selecting previously unselected package libavcodec61:amd64.
+#16 54.13 Preparing to unpack .../109-libavcodec61_7%3a7.1.3-0+deb13u1_amd64.deb ...
+#16 54.14 Unpacking libavcodec61:amd64 (7:7.1.3-0+deb13u1) ...
+#16 54.40 Selecting previously unselected package libasound2-data.
+#16 54.41 Preparing to unpack .../110-libasound2-data_1.2.14-1_all.deb ...
+#16 54.41 Unpacking libasound2-data (1.2.14-1) ...
+#16 54.47 Selecting previously unselected package libasound2t64:amd64.
+#16 54.47 Preparing to unpack .../111-libasound2t64_1.2.14-1_amd64.deb ...
+#16 54.48 Unpacking libasound2t64:amd64 (1.2.14-1) ...
+#16 54.54 Selecting previously unselected package libraw1394-11:amd64.
+#16 54.54 Preparing to unpack .../112-libraw1394-11_2.1.2-2+b2_amd64.deb ...
+#16 54.55 Unpacking libraw1394-11:amd64 (2.1.2-2+b2) ...
+#16 54.59 Selecting previously unselected package libavc1394-0:amd64.
+#16 54.60 Preparing to unpack .../113-libavc1394-0_0.5.4-5+b2_amd64.deb ...
+#16 54.60 Unpacking libavc1394-0:amd64 (0.5.4-5+b2) ...
+#16 54.66 Selecting previously unselected package libunibreak6:amd64.
+#16 54.66 Preparing to unpack .../114-libunibreak6_6.1-3_amd64.deb ...
+#16 54.66 Unpacking libunibreak6:amd64 (6.1-3) ...
+#16 54.72 Selecting previously unselected package libass9:amd64.
+#16 54.73 Preparing to unpack .../115-libass9_1%3a0.17.3-1+b1_amd64.deb ...
+#16 54.73 Unpacking libass9:amd64 (1:0.17.3-1+b1) ...
+#16 54.81 Selecting previously unselected package libudfread0:amd64.
+#16 54.81 Preparing to unpack .../116-libudfread0_1.1.2-1+b2_amd64.deb ...
+#16 54.82 Unpacking libudfread0:amd64 (1.1.2-1+b2) ...
+#16 54.87 Selecting previously unselected package libbluray2:amd64.
+#16 54.87 Preparing to unpack .../117-libbluray2_1%3a1.3.4-1+b2_amd64.deb ...
+#16 54.88 Unpacking libbluray2:amd64 (1:1.3.4-1+b2) ...
+#16 54.93 Selecting previously unselected package libchromaprint1:amd64.
+#16 54.93 Preparing to unpack .../118-libchromaprint1_1.5.1-7_amd64.deb ...
+#16 54.94 Unpacking libchromaprint1:amd64 (1.5.1-7) ...
+#16 54.99 Selecting previously unselected package libdvdread8t64:amd64.
+#16 54.99 Preparing to unpack .../119-libdvdread8t64_6.1.3-2_amd64.deb ...
+#16 55.00 Unpacking libdvdread8t64:amd64 (6.1.3-2) ...
+#16 55.06 Selecting previously unselected package libdvdnav4:amd64.
+#16 55.06 Preparing to unpack .../120-libdvdnav4_6.1.1-3+b1_amd64.deb ...
+#16 55.07 Unpacking libdvdnav4:amd64 (6.1.1-3+b1) ...
+#16 ...
+
+#23 [worker builder 5/5] RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+#23 34.48    ╸                                        11.5/779.2 MB 19.9 MB/s eta 0:00:39
+#23 34.49 ERROR: Exception:
+#23 34.49 Traceback (most recent call last):
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 438, in _error_catcher
+#23 34.49     yield
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 561, in read
+#23 34.49     data = self._fp_read(amt) if not fp_closed else b""
+#23 34.49            ^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 527, in _fp_read
+#23 34.49     return self._fp.read(amt) if amt is not None else self._fp.read()
+#23 34.49            ^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/http/client.py", line 473, in read
+#23 34.49     s = self.fp.read(amt)
+#23 34.49         ^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/socket.py", line 718, in readinto
+#23 34.49     return self._sock.recv_into(b)
+#23 34.49            ^^^^^^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/ssl.py", line 1314, in recv_into
+#23 34.49     return self.read(nbytes, buffer)
+#23 34.49            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/ssl.py", line 1166, in read
+#23 34.49     return self._sslobj.read(len, buffer)
+#23 34.49            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#23 34.49 TimeoutError: The read operation timed out
+#23 34.49
+#23 34.49 During handling of the above exception, another exception occurred:
+#23 34.49
+#23 34.49 Traceback (most recent call last):
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/base_command.py", line 180, in exc_logging_wrapper
+#23 34.49     status = run_func(*args)
+#23 34.49              ^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/req_command.py", line 245, in wrapper
+#23 34.49     return func(self, options, args)
+#23 34.49            ^^^^^^^^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/commands/install.py", line 377, in run
+#23 34.49     requirement_set = resolver.resolve(
+#23 34.49                       ^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/resolution/resolvelib/resolver.py", line 179, in resolve
+#23 34.49     self.factory.preparer.prepare_linked_requirements_more(reqs)
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 552, in prepare_linked_requirements_more
+#23 34.49     self._complete_partial_requirements(
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/operations/prepare.py", line 467, in _complete_partial_requirements
+#23 34.49     for link, (filepath, _) in batch_download:
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/download.py", line 183, in __call__
+#23 34.49     for chunk in chunks:
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/cli/progress_bars.py", line 53, in _rich_progress_bar
+#23 34.49     for chunk in iterable:
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_internal/network/utils.py", line 63, in response_chunks
+#23 34.49     for chunk in response.raw.stream(
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 622, in stream
+#23 34.49     data = self.read(amt=amt, decode_content=decode_content)
+#23 34.49            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 560, in read
+#23 34.49     with self._error_catcher():
+#23 34.49   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+#23 34.49     self.gen.throw(typ, value, traceback)
+#23 34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 443, in _error_catcher
+#23 34.49     raise ReadTimeoutError(self._pool, None, "Read timed out.")
+#23 34.49 pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='files.pythonhosted.org', port=443): Read timed out.
+#23 34.61
+#23 34.61 [notice] A new release of pip is available: 24.0 -> 26.0
+#23 34.61 [notice] To update, run: pip install --upgrade pip
+#23 ERROR: process "/bin/sh -c pip install --no-cache-dir --prefix=/install -r requirements.txt" did not complete successfully: exit code: 2
+
+#23 [backend builder 5/5] RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+#23 ERROR: process "/bin/sh -c pip install --no-cache-dir --prefix=/install -r requirements.txt" did not complete successfully: exit code: 2
+
+#16 [worker production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 CANCELED
+
+#26 [frontend builder 5/5] RUN npm run build
+#26 ...
+
+#16 [backend production 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     ffmpeg     libsndfile1     curl     && rm -rf /var/lib/apt/lists/*
+#16 CANCELED
+
+#26 [frontend builder 5/5] RUN npm run build
+#26 CANCELED
+------
+ > [backend builder 5/5] RUN pip install --no-cache-dir --prefix=/install -r requirements.txt:
+34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 560, in read    
+34.49     with self._error_catcher():
+34.49   File "/usr/local/lib/python3.11/contextlib.py", line 158, in __exit__
+34.49     self.gen.throw(typ, value, traceback)
+34.49   File "/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/response.py", line 443, in _error_catcher
+34.49     raise ReadTimeoutError(self._pool, None, "Read timed out.")
+34.49 pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='files.pythonhosted.org', port=443): Read timed out.
+34.61
+34.61 [notice] A new release of pip is available: 24.0 -> 26.0
+34.61 [notice] To update, run: pip install --upgrade pip
+------
+[+] up 0/3
+ - Image voice2character-frontend Building                                                             67.5s 
+ - Image voice2character-backend  Building                                                             67.5s 
+ - Image voice2character-worker   Building                                                             67.5s 
+Dockerfile:20
+
+--------------------
+
+  18 |     # 依存関係ファイルのコピーとインストール
+
+  19 |     COPY requirements.txt .
+
+  20 | >>> RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+  21 |
+
+  22 |     # ---- ステージ2: Whisperモデルのプリダウンロード ----
+
+--------------------
+
+target backend: failed to solve: process "/bin/sh -c pip install --no-cache-dir --prefix=/install -r requirements.txt" did not complete successfully: exit code: 2
