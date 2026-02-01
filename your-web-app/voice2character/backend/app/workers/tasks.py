@@ -113,12 +113,20 @@ def _send_progress_via_websocket(
         r = redis_lib.Redis.from_url(settings.REDIS_URL)
         import json
 
-        update = {
+        update: dict = {
             "job_id": job_id,
             "status": status,
             "progress": progress,
             "message": message,
         }
+        # ETA情報がメッセージにエンコードされている場合、フィールドとして抽出
+        if message.startswith("ETA:"):
+            try:
+                eta_part, display_msg = message.split("|", 1)
+                update["eta_seconds"] = float(eta_part.replace("ETA:", ""))
+                update["message"] = display_msg
+            except (ValueError, IndexError):
+                pass
         # Redis Pub/Subチャンネルに発行
         r.publish(f"job_progress:{job_id}", json.dumps(update))
         r.close()
@@ -244,17 +252,34 @@ def process_transcription_task(self, job_id: str) -> dict:
                 job_id, "transcribing", job_progress, message
             )
 
-        # 文字起こし実行
+        # 文字起こし実行（audio_durationを渡してタイマーベース進捗推定を有効化）
         segments = transcriber.transcribe(
             audio_path=str(audio_output_path),
             language=job.language,
             progress_callback=progress_callback,
+            audio_duration=duration,
         )
 
         _update_job_status(session, job_id, "transcribing", 90.0)
         _send_progress_via_websocket(
             job_id, "transcribing", 90.0, "文字起こし結果を保存しています..."
         )
+
+        # ---- ステップ3.5: セグメント品質チェック ----
+        # 極端にセグメント数が多い場合は警告（ハルシネーションの可能性）
+        if duration and len(segments) > 0:
+            # 通常の日本語会話は1分あたり約10-20セグメント
+            segments_per_minute = len(segments) / (duration / 60.0)
+            if segments_per_minute > 30:
+                logger.warning(
+                    "セグメント密度が異常に高い: job_id=%s, "
+                    "segments=%d, duration=%.1fs, "
+                    "segments_per_minute=%.1f",
+                    job_id,
+                    len(segments),
+                    duration,
+                    segments_per_minute,
+                )
 
         # ---- ステップ4: セグメントをDBに保存 ----
         for seg_data in segments:

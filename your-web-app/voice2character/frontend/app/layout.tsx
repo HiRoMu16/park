@@ -8,26 +8,10 @@
  * - Headerコンポーネントの配置
  */
 
-import { useEffect, useState, createContext, useContext, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Header from '@/components/Header';
+import { DarkModeContext } from '@/lib/dark-mode';
 import './globals.css';
-
-/** ダークモードコンテキストの型 */
-interface DarkModeContextType {
-  isDark: boolean;
-  toggleDarkMode: () => void;
-}
-
-/** ダークモードコンテキスト */
-export const DarkModeContext = createContext<DarkModeContextType>({
-  isDark: false,
-  toggleDarkMode: () => {},
-});
-
-/** ダークモードコンテキストを使用するカスタムフック */
-export function useDarkMode(): DarkModeContextType {
-  return useContext(DarkModeContext);
-}
 
 /** メタデータ（クライアントコンポーネントのため手動で設定） */
 const APP_TITLE = 'VoiceScribe - 高精度音声文字起こし';

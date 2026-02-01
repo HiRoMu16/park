@@ -78,6 +78,8 @@ export interface ProgressMessage {
   progress: number;
   message?: string;
   error_message?: string;
+  /** 推定残り時間（秒） */
+  eta_seconds?: number;
 }
 
 /** APIエラーレスポンス */

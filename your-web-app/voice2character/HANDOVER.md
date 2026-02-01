@@ -145,11 +145,24 @@ OpenAI Whisper Large-v3を使用し、日本語を中心とした多言語の音
 | `app/services/__init__.py` | サービスパッケージ |
 | `app/services/audio_extractor.py` | `AudioExtractor`クラス。FFmpegで音声抽出（16kHz, mono, PCM16）。ffprobeで長さ取得・メディア検証 |
 | `app/services/system_info.py` | `SystemInfoService`クラス。psutil/torch.cudaによるハードウェア検出、Whisperモデル推奨エンジン。`WHISPER_MODELS`定数（モデルメタデータ一元管理） |
-| `app/services/transcriber.py` | `TranscriberService`クラス（シングルトン + スレッドロック）。Whisperモデルロード・再ロード対応、文字起こし実行、セグメント整形。日本語最適化パラメータ（beam_size=5, temperature=0, VADフィルタ有効） |
+| `app/services/redis_subscriber.py` | `RedisProgressSubscriber`クラス。Redis Pub/Sub購読→WebSocket ConnectionManager中継。FastAPI lifespanで起動/停止 |
+| `app/services/transcriber.py` | `TranscriberService`クラス（シングルトン + スレッドロック）。Whisperモデルロード・再ロード対応、文字起こし実行、ハルシネーション検出付きセグメント整形。日本語最適化パラメータ（beam_size=5, temperatureタプル, condition_on_previous_text=False） |
 | `app/services/file_manager.py` | `FileManager`クラス。チャンク保存・結合・削除、ジョブファイル全削除、ディスク容量確認 |
 | `app/services/export_service.py` | `ExportService`クラス。TXT/SRT/VTT/JSON/TSVの5形式変換。タイムスタンプフォーマッタ（SRT: カンマ区切り、VTT: ドット区切り） |
 | `app/workers/__init__.py` | Celeryアプリケーション初期化。ブローカー/バックエンドはRedis。`task_acks_late=True`, `worker_concurrency=1` |
 | `app/workers/tasks.py` | `process_transcription_task` Celeryタスク。処理パイプライン全体の制御。同期DBセッション（psycopg2）、Redis Pub/Sub進捗通知、リトライ（最大3回） |
+| `alembic.ini` | Alembicマイグレーション設定。DB URLはenv.pyで動的設定 |
+| `alembic/env.py` | Alembic環境設定。asyncpg非同期マイグレーション対応。app.database.Baseのメタデータ自動認識 |
+| `alembic/script.py.mako` | マイグレーションスクリプトテンプレート |
+| `alembic/versions/001_initial_schema.py` | 初期マイグレーション。jobs + transcription_segments テーブル作成 |
+| `pytest.ini` | pytest設定。asyncio_mode=auto |
+| `requirements-test.txt` | テスト用追加依存パッケージ（pytest, pytest-asyncio, aiosqlite等） |
+| `tests/__init__.py` | テストパッケージ初期化 |
+| `tests/conftest.py` | テスト共通フィクスチャ。SQLite In-Memory DB、FastAPI TestClient、redis_subscriberモック化 |
+| `tests/test_transcriber.py` | TranscriberServiceテスト。ハルシネーション検出ロジック、セグメント処理の単体テスト |
+| `tests/test_export_service.py` | ExportServiceテスト。TXT/SRT/VTT/JSON/TSV全形式のエクスポート検証 |
+| `tests/test_schemas.py` | Pydanticスキーマテスト。バリデーションルール（パストラバーサル防止、モデル名検証等） |
+| `tests/test_api.py` | API統合テスト。httpx AsyncClientによるエンドポイントテスト |
 
 ### frontend/
 
@@ -175,6 +188,10 @@ OpenAI Whisper Large-v3を使用し、日本語を中心とした多言語の音
 | `components/ProgressTracker.tsx` | 進捗表示。円形SVGプログレスバー、4ステップインジケーター（アップロード/音声抽出/文字起こし/完了）、接続線アニメーション、エラー/完了表示 |
 | `components/TranscriptionViewer.tsx` | 結果表示。セグメント/フルテキスト表示切替、テキスト検索+ハイライト、全文コピー、信頼度スコア表示（低信頼度マーキング閾値70%）、統計情報、スクロールトップ |
 | `components/ExportPanel.tsx` | エクスポート。5形式選択グリッド（アイコン付き）、形式説明、プレビュー表示（先頭5セグメント）、ダウンロードリンク |
+| `jest.config.ts` | Jest設定。next/jest使用、jsdom環境、パスエイリアス対応 |
+| `jest.setup.ts` | Jestセットアップ。@testing-library/jest-domインポート |
+| `__tests__/lib/api.test.ts` | API通信ライブラリテスト。ユーティリティ関数、fetch呼び出し、エラーハンドリング |
+| `__tests__/lib/websocket.test.ts` | WebSocketManagerテスト。接続管理、コールバック登録/解除、リソース解放 |
 
 ### docker/
 
@@ -294,14 +311,23 @@ uploading -> queued -> extracting -> transcribing -> completed
 - `_unload_model()` --- モデル解放 + `torch.cuda.empty_cache()`でGPUメモリ解放
 - `transcribe(audio_path, language, progress_callback)` --- 文字起こし実行
 - `current_model_name` / `current_device` --- 現在ロード中のモデル名・デバイス（プロパティ）
-- **日本語最適化パラメータ:**
+- `_process_segments()` --- ハルシネーション検出付きセグメント整形（3層フィルタリング）
+- `_is_repetitive_text()` --- テキスト内繰り返しパターン検出（カバレッジ70%以上で検出）
+- **日本語最適化パラメータ（ハルシネーション対策済み）:**
   - `beam_size=5`, `best_of=5` --- 精度重視
-  - `temperature=0` --- 決定的生成
+  - `temperature=(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)` --- タプル指定で温度フォールバック有効化
   - `initial_prompt="以下は日本語の音声の書き起こしです。"` --- 日本語コンテキスト
-  - `condition_on_previous_text=True` --- 前テキスト参照
+  - `condition_on_previous_text=False` --- ハルシネーション連鎖防止のため無効化
+  - `compression_ratio_threshold=2.4` --- 繰り返しテキスト検出
+  - `logprob_threshold=-1.0` --- 低品質セグメント検出
+  - `no_speech_threshold=0.6` --- 無音セグメント検出
   - `fp16=True` (GPU時) --- FP16高速化
-  - `vad_filter=True` --- 無音区間検出フィルタ
-  - VADパラメータ: `threshold=0.5`, `min_speech_duration_ms=250`, `min_silence_duration_ms=1000`
+- **ハルシネーション検出フィルタ（5層）:**
+  - 検出1: 無音確率 > 0.8 のセグメント除外
+  - 検出2: テキスト内繰り返しパターン除外（先頭起点: 60%カバレッジ、任意位置: 50%カバレッジ + 句読点区切りフレーズ検出）
+  - 検出3: 連続同一テキスト除外
+  - 検出4: 連続類似セグメント蓄積打ち切り（`_extract_core_phrase()`で主要フレーズを抽出し、同一フレーズが`_MAX_CONSECUTIVE_SIMILAR`回以上連続した場合に除外）
+  - スライディングウィンドウ方式: テキスト内の任意の位置からパターンを抽出し、4回以上出現かつ50%以上のカバレッジで繰り返しと判定
 - 信頼度スコア: `1.0 - no_speech_prob` で計算
 
 #### FileManager (`app/services/file_manager.py`)
@@ -639,16 +665,15 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 - Whisperモデル選択機能（ドロップダウンUI + ジョブ別モデル指定 + 推奨設定自動検出）
 - デバイス選択機能（CPU/GPU選択 + GPU自動検出 + ジョブ別デバイス指定）
 - TranscriberServiceモデル再ロード対応（異なるモデル/デバイスへの動的切替）
+- Redis Pub/Sub → WebSocketリアルタイム進捗中継（RedisProgressSubscriberによるブリッジ実装）
+- Whisperハルシネーション対策（温度フォールバック + condition_on_previous_text無効化 + 5層フィルタリング）
+- ハルシネーション対策強化（スライディングウィンドウ任意位置パターン検出、句読点区切りフレーズ検出、連続類似セグメント蓄積打ち切り）
+- バックエンドテストコード追加（pytest + httpx AsyncClient、SQLite In-Memory、4テストモジュール）
+- フロントエンドテスト基盤構築（Jest + React Testing Library、API通信・WebSocketのテスト）
+- Alembicマイグレーション設定（asyncpg非同期対応、初期スキーママイグレーション作成済み）
+- 既知のバグ修正確認済み（JobList.tsx型、WebSocket URL、PaginatedResponse型 → 全て修正済みの状態を確認）
 
 ### 残課題・将来の改善提案
-
-#### 高優先度
-
-| 課題 | 詳細 |
-|------|------|
-| Redis Pub/Sub -> WebSocket中継の実装 | Celeryワーカーがredis.publishした進捗メッセージを、FastAPI側でsubscribeしてWebSocket経由でクライアントに中継する処理が未実装。現状はフロントエンドのfetchJobポーリングに依存。 |
-| テストコードの追加 | バックエンド: pytest + httpx (AsyncClient)。フロントエンド: Jest + React Testing Library。 |
-| Alembicマイグレーション設定 | 現在は`create_tables()`による自動テーブル作成のみ。スキーマ変更時のマイグレーション管理が必要。 |
 
 #### 中優先度
 
@@ -659,6 +684,7 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 | Whisperモデルの事前ダウンロード最適化 | Dockerビルド時にモデルをダウンロードしているが、キャッシュ層の活用やモデルの外部ボリューム化で改善可能。 |
 | 処理結果のキャッシュ機能 | 同一ファイルの再処理を避けるため、ファイルハッシュベースのキャッシュ機構。 |
 | CI/CDパイプライン | GitHub Actions等によるテスト自動実行、Dockerイメージビルド、デプロイ自動化。 |
+| テストカバレッジ拡充 | 現在はユニットテスト中心。E2Eテスト（Playwright等）やCeleryタスクの統合テストを追加する。 |
 
 #### 低優先度
 
@@ -668,8 +694,6 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 | 監視・ログ収集 | Prometheus + Grafanaによるメトリクス監視。ELK Stackによるログ集約。 |
 | SSL/TLS設定 | 本番環境向けのHTTPS対応。Let's Encrypt + Nginx設定。 |
 | ファイルのウイルススキャン | ClamAV等によるアップロードファイルのマルウェア検査。 |
-| フロントエンドのJobList.tsxの型エラー | `PaginatedResponse<Job>`型が`types/index.ts`で定義されておらず、実際には`JobListResponse`を使うべき。`jobs.items`の参照も`jobs.jobs`にする必要がある。 |
-| WebSocket URL不整合 | `websocket.ts`のURL構築 (`/ws/jobs/{jobId}/progress`) と`main.py`のルート (`/ws/{job_id}`) が不一致。フロントエンド側のURLをバックエンドに合わせる修正が必要。 |
 
 ---
 
@@ -679,7 +703,9 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 
 - CeleryワーカーとFastAPIサーバーは別プロセスで動作する。
 - ワーカーから`redis.publish(f"job_progress:{job_id}", json_message)`で通知を発行。
-- **現在の課題**: FastAPI側でRedis Pub/Subをsubscribeし、ConnectionManagerを通じてWebSocketクライアントに中継する仕組みが未実装。
+- `RedisProgressSubscriber`（`redis_subscriber.py`）がFastAPI lifespanで起動し、`job_progress:*`パターンを購読。
+- 受信したメッセージを`ConnectionManager.send_progress()`経由でWebSocketクライアントに中継。
+- `redis.asyncio`を使用した非同期サブスクリプションにより、FastAPIイベントループをブロックしない。
 
 ### Whisperモデルのシングルトンパターンとスレッドセーフ性
 
@@ -786,6 +812,67 @@ npm run build
 npm run lint
 ```
 
+### テスト実行
+
+```bash
+# ---- バックエンドテスト ----
+cd backend
+
+# テスト用依存関係のインストール
+pip install -r requirements-test.txt
+
+# 全テスト実行
+pytest
+
+# 詳細出力付き
+pytest -v
+
+# カバレッジ付き
+pytest --cov=app --cov-report=html
+
+# 特定テストモジュールのみ実行
+pytest tests/test_transcriber.py
+pytest tests/test_export_service.py
+pytest tests/test_schemas.py
+pytest tests/test_api.py
+
+# ---- フロントエンドテスト ----
+cd frontend
+
+# 依存関係のインストール
+npm install
+
+# テスト実行
+npm test
+
+# ウォッチモード
+npm run test:watch
+
+# カバレッジ付き
+npm run test:coverage
+```
+
+### Alembicマイグレーション
+
+```bash
+cd backend
+
+# マイグレーション生成（モデル変更後）
+alembic revision --autogenerate -m "変更内容の説明"
+
+# マイグレーション適用
+alembic upgrade head
+
+# 1つ前にロールバック
+alembic downgrade -1
+
+# 現在のリビジョン確認
+alembic current
+
+# マイグレーション履歴確認
+alembic history
+```
+
 ---
 
 ## 10. AIアシスタントへの申し送り事項
@@ -800,14 +887,18 @@ npm run lint
 6. **backend/app/main.py** --- FastAPIアプリの起動フローとミドルウェアを確認する
 7. **backend/app/api/routes/upload.py** --- チャンクアップロードの仕組みを理解する
 8. **backend/app/workers/tasks.py** --- 文字起こし処理パイプラインの全体フローを理解する
-9. **backend/app/services/transcriber.py** --- Whisperの設定パラメータとモデル再ロード機構を確認する
-10. **backend/app/services/system_info.py** --- Whisperモデルメタデータと推奨設定ロジックを確認する
-11. **frontend/types/index.ts** --- フロントエンドの型定義を把握する
-12. **frontend/lib/api.ts** --- API通信の実装を確認する
-13. **frontend/lib/websocket.ts** --- WebSocket管理の実装を確認する
-14. **frontend/components/FileUploader.tsx** --- チャンクアップロード・モデル/デバイス選択のフロントエンド実装を確認する
-15. **frontend/components/SystemInfoPanel.tsx** --- システム環境情報パネルの実装を確認する
-16. **frontend/app/jobs/[id]/page.tsx** --- ジョブ詳細ページのWebSocket連携を確認する
+9. **backend/app/services/transcriber.py** --- Whisperの設定パラメータ、ハルシネーション対策、モデル再ロード機構を確認する
+10. **backend/app/services/redis_subscriber.py** --- Redis Pub/Sub→WebSocket中継ブリッジの実装を確認する
+11. **backend/app/services/system_info.py** --- Whisperモデルメタデータと推奨設定ロジックを確認する
+12. **frontend/types/index.ts** --- フロントエンドの型定義を把握する
+13. **frontend/lib/api.ts** --- API通信の実装を確認する
+14. **frontend/lib/websocket.ts** --- WebSocket管理の実装を確認する
+15. **frontend/components/FileUploader.tsx** --- チャンクアップロード・モデル/デバイス選択のフロントエンド実装を確認する
+16. **frontend/components/SystemInfoPanel.tsx** --- システム環境情報パネルの実装を確認する
+17. **frontend/app/jobs/[id]/page.tsx** --- ジョブ詳細ページのWebSocket連携を確認する
+18. **backend/alembic/env.py** --- Alembicマイグレーション環境設定を確認する
+19. **backend/tests/conftest.py** --- テストフィクスチャ（SQLite In-Memory、モック化手法）を確認する
+20. **backend/tests/test_transcriber.py** --- ハルシネーション検出ロジックのテストケースを確認する
 
 ### 修正・追加機能を実装する際の注意事項
 
@@ -816,11 +907,18 @@ npm run lint
 3. **非同期/同期の使い分け** --- FastAPI側は`async/await`（asyncpg）、Celeryワーカー側は同期処理（psycopg2）。新しいサービスを追加する際はどちらのコンテキストで呼ばれるか注意する。
 4. **Dockerのレイヤーキャッシュ** --- `requirements.txt`や`package.json`の変更は依存関係の再インストールを引き起こす。Dockerビルドが遅くなる点に注意。
 5. **Whisperモデルのメモリ消費** --- large-v3モデルはGPU VRAM約10GB、CPU RAM約10GBを消費する。`worker_concurrency`を増やす場合はメモリ容量に注意。
-6. **既知の不整合**:
-   - `JobList.tsx`で`jobs.items`を参照しているが、バックエンドの`JobListResponse`のフィールドは`jobs`。
-   - `websocket.ts`のWebSocket URLパス(`/ws/jobs/{jobId}/progress`)とバックエンドのルート(`/ws/{job_id}`)が不一致。
-   - `types/index.ts`に`PaginatedResponse`型が未定義だが`JobList.tsx`で使用されている。
+6. **既知の不整合** --- v4時点で全て解消済み:
+   - ~~`JobList.tsx`で`jobs.items`参照~~ → `jobs.jobs`に修正済み
+   - ~~`websocket.ts`のWebSocket URLパス不一致~~ → `/ws/${jobId}`に修正済み
+   - ~~`types/index.ts`の`PaginatedResponse`型未定義~~ → `JobListResponse`として定義済み
 7. **環境変数の管理** --- `.env`ファイルはgitignoreに含まれている。新しい環境変数を追加した場合は`.env.example`にも追記すること。
-8. **テストの追加** --- 現在テストコードは存在しない。機能追加時にはテストも併せて実装することを推奨。
-9. **DBマイグレーション** --- 現在は`create_tables()`（`Base.metadata.create_all()`）による自動テーブル作成を使用。既存テーブルにカラムを追加した場合（例: `whisper_model`, `whisper_device`）、Docker環境を`docker compose down -v && docker compose up`で再構築するか、手動で`ALTER TABLE jobs ADD COLUMN ...`を実行する必要がある。
+8. **テストの実行方法**:
+   - バックエンド: `cd backend && pip install -r requirements-test.txt && pytest`
+   - フロントエンド: `cd frontend && npm install && npm test`
+   - テスト用DBはSQLite In-Memoryを使用するため、PostgreSQL不要でバックエンドテストを実行可能。
+9. **DBマイグレーション** --- Alembicを使用したマイグレーション管理が導入済み。新しいカラム追加やスキーマ変更時は以下の手順で実行:
+   - `cd backend && alembic revision --autogenerate -m "変更内容"` でマイグレーション生成
+   - `alembic upgrade head` でマイグレーション適用
+   - `alembic downgrade -1` でロールバック
+   - 初期起動時は引き続き`create_tables()`も動作する（Alembicと併用可能）
 10. **Whisperモデル選択の仕様** --- `WHISPER_MODELS`定数（`system_info.py`）がモデルメタデータの唯一のソース。推奨エンジンは利用可能メモリの80%以内で動作する最大モデルを推奨する。ジョブのmodel/deviceがnullの場合はサーバーデフォルト（`config.py`のWHISPER_MODEL/WHISPER_DEVICE）にフォールバックする。

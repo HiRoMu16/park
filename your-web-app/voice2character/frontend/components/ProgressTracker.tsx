@@ -9,7 +9,7 @@
  * - アニメーション付きステップ遷移
  */
 
-import { Upload, AudioLines, FileText, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, AudioLines, FileText, CheckCircle2, AlertCircle, Timer } from 'lucide-react';
 import { clsx } from 'clsx';
 import type { JobStatus } from '@/types';
 
@@ -70,6 +70,8 @@ interface ProgressTrackerProps {
   progress: number;
   /** 推定残り時間（秒、オプション） */
   estimatedTime?: number;
+  /** サーバーからのステータスメッセージ（オプション） */
+  statusMessage?: string;
   /** エラーメッセージ（オプション） */
   errorMessage?: string | null;
 }
@@ -78,6 +80,7 @@ export default function ProgressTracker({
   status,
   progress,
   estimatedTime,
+  statusMessage,
   errorMessage,
 }: ProgressTrackerProps) {
   const currentStepIndex = getStepIndex(status);
@@ -90,9 +93,13 @@ export default function ProgressTracker({
   /** 残り時間のフォーマット */
   const formatEstimatedTime = (seconds?: number): string => {
     if (!seconds || seconds <= 0) return '';
-    if (seconds < 60) return `約${Math.ceil(seconds)}秒`;
-    if (seconds < 3600) return `約${Math.ceil(seconds / 60)}分`;
-    return `約${Math.floor(seconds / 3600)}時間${Math.ceil((seconds % 3600) / 60)}分`;
+    if (seconds < 60) return `残り約${Math.ceil(seconds)}秒`;
+    if (seconds < 3600) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.ceil(seconds % 60);
+      return secs > 0 ? `残り約${mins}分${secs}秒` : `残り約${mins}分`;
+    }
+    return `残り約${Math.floor(seconds / 3600)}時間${Math.ceil((seconds % 3600) / 60)}分`;
   };
 
   /** ステータスに応じたプログレスカラーを取得 */
@@ -101,6 +108,17 @@ export default function ProgressTracker({
     if (status === 'completed') return 'stroke-green-500';
     return 'stroke-brand-500';
   };
+
+  /** 表示するステップ説明（サーバーメッセージがあればそちらを優先） */
+  const getStepDescription = (): string => {
+    if (statusMessage) return statusMessage;
+    if (currentStepIndex >= 0 && currentStepIndex < STEPS.length) {
+      return STEPS[currentStepIndex].description;
+    }
+    return 'キュー待ちです。まもなく処理が開始されます...';
+  };
+
+  const etaText = formatEstimatedTime(estimatedTime);
 
   return (
     <div className="space-y-8">
@@ -122,7 +140,7 @@ export default function ProgressTracker({
             />
             {/* 進捗インジケーター */}
             <circle
-              className={clsx('circular-progress-fill', getProgressColor())}
+              className={clsx('circular-progress-fill transition-all duration-1000 ease-out', getProgressColor())}
               cx="64"
               cy="64"
               r={radius}
@@ -138,13 +156,18 @@ export default function ProgressTracker({
             <span className="text-3xl font-bold text-gray-900 dark:text-white">
               {Math.round(progress)}%
             </span>
-            {estimatedTime && estimatedTime > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {formatEstimatedTime(estimatedTime)}
-              </span>
-            )}
           </div>
         </div>
+
+        {/* 残り時間表示（円形バーの下） */}
+        {etaText && status === 'transcribing' && (
+          <div className="mt-3 flex items-center gap-1.5 rounded-full bg-brand-50 px-3 py-1 dark:bg-brand-950/30">
+            <Timer className="h-3.5 w-3.5 text-brand-500" />
+            <span className="text-xs font-medium text-brand-600 dark:text-brand-400">
+              {etaText}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* ステップインジケーター */}
@@ -163,7 +186,6 @@ export default function ProgressTracker({
           {STEPS.map((step, index) => {
             const isCompleted = currentStepIndex > index;
             const isCurrent = currentStepIndex === index;
-            const isUpcoming = currentStepIndex < index;
             const isFailed = status === 'failed' && currentStepIndex === -1;
             const StepIcon = step.icon;
 
@@ -227,9 +249,7 @@ export default function ProgressTracker({
       {status !== 'completed' && status !== 'failed' && (
         <div className="hidden text-center sm:block">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            {currentStepIndex >= 0 && currentStepIndex < STEPS.length
-              ? STEPS[currentStepIndex].description
-              : 'キュー待ちです。まもなく処理が開始されます...'}
+            {getStepDescription()}
           </p>
         </div>
       )}

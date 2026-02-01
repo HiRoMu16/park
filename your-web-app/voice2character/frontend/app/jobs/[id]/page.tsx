@@ -71,6 +71,8 @@ export default function JobDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [wsState, setWsState] = useState<ConnectionState>('disconnected');
+  const [etaSeconds, setEtaSeconds] = useState<number | undefined>(undefined);
+  const [progressMessage, setProgressMessage] = useState<string | undefined>(undefined);
   const wsManagerRef = useRef<WebSocketManager | null>(null);
 
   /** ジョブ情報を取得する */
@@ -153,8 +155,16 @@ export default function JobDetailPage() {
         };
       });
 
+      // ETA情報とメッセージを更新
+      setEtaSeconds(message.eta_seconds);
+      if (message.message) {
+        setProgressMessage(message.message);
+      }
+
       // 完了時に文字起こし結果を取得
       if (message.status === 'completed') {
+        setEtaSeconds(undefined);
+        setProgressMessage(undefined);
         getTranscription(jobId)
           .then((data) => setTranscription(data))
           .catch(console.error);
@@ -164,6 +174,8 @@ export default function JobDetailPage() {
 
       // エラー時にWebSocket切断
       if (message.status === 'failed') {
+        setEtaSeconds(undefined);
+        setProgressMessage(undefined);
         manager.disconnect();
       }
     });
@@ -344,6 +356,8 @@ export default function JobDetailPage() {
           <ProgressTracker
             status={job.status}
             progress={job.progress}
+            estimatedTime={etaSeconds}
+            statusMessage={progressMessage}
             errorMessage={job.error_message}
           />
         </div>

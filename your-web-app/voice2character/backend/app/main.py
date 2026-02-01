@@ -20,6 +20,7 @@ from app.api import api_router
 from app.api.websocket import websocket_endpoint
 from app.config import settings
 from app.database import create_tables, dispose_engine
+from app.services.redis_subscriber import redis_subscriber
 
 # ---- ロギング設定 ----
 logging.basicConfig(
@@ -68,6 +69,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         logger.error("データベース初期化エラー: %s", str(e))
         # DB接続失敗時もアプリは起動する（ヘルスチェックで検出可能）
 
+    # Redis Pub/Subサブスクライバーの起動（進捗メッセージをWebSocketに中継）
+    await redis_subscriber.start()
+
     logger.info(
         "%s v%s が起動しました。Whisperモデル: %s",
         __app_name__,
@@ -79,6 +83,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     # ---- 終了処理 ----
     logger.info("%s を終了しています...", __app_name__)
+    await redis_subscriber.stop()
     await dispose_engine()
     logger.info("データベース接続を解放しました。")
 

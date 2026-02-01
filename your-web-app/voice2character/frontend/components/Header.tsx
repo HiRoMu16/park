@@ -12,7 +12,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Sun, Moon, Menu, X, Mic, Home, List } from 'lucide-react';
-import { useDarkMode } from '@/app/layout';
+import { useDarkMode } from '@/lib/dark-mode';
 import { clsx } from 'clsx';
 
 /** ナビゲーションアイテムの定義 */
