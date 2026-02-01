@@ -40,6 +40,8 @@ class TranscriberService:
             return
         self._initialized = True
         self._device: str = "cpu"
+        self._current_model_name: str | None = None
+        self._current_device: str | None = None
 
     def load_model(
         self,
@@ -50,25 +52,47 @@ class TranscriberService:
         """
         Whisperモデルをロードする。
 
-        起動時に一度だけ呼び出す。ロード済みの場合はスキップする。
+        同じモデル・デバイスが既にロード済みの場合はスキップする。
+        異なるモデル・デバイスが指定された場合は既存モデルを解放してから再ロードする。
 
         Args:
             model_name: 使用するモデル名（例: "large-v3"）
             device: 推論デバイス（"auto", "cuda", "cpu"）
             download_root: モデルダウンロード先ディレクトリ
         """
-        if self._model_loaded:
-            logger.info("Whisperモデルは既にロード済みです。")
-            return
-
         import torch
         import whisper
 
-        # デバイスの自動検出
+        # デバイスの解決（"auto"の場合はCUDA検出）
+        resolved_device = device
         if device == "auto":
-            self._device = "cuda" if torch.cuda.is_available() else "cpu"
-        else:
-            self._device = device
+            resolved_device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        # 同じモデル・デバイスなら再ロード不要
+        if (
+            self._model_loaded
+            and self._current_model_name == model_name
+            and self._current_device == resolved_device
+        ):
+            logger.info(
+                "Whisperモデルは既にロード済みです: model=%s, device=%s",
+                model_name,
+                resolved_device,
+            )
+            return
+
+        # 異なるモデル/デバイスが要求された場合、既存モデルを解放
+        if self._model_loaded:
+            logger.info(
+                "モデル変更を検出。既存モデルを解放します: %s(%s) -> %s(%s)",
+                self._current_model_name,
+                self._current_device,
+                model_name,
+                resolved_device,
+            )
+            self._unload_model()
+
+        self._device = resolved_device
 
         logger.info(
             "Whisperモデルロード開始: model=%s, device=%s",
@@ -84,11 +108,38 @@ class TranscriberService:
         )
 
         self._model_loaded = True
+        self._current_model_name = model_name
+        self._current_device = self._device
+
         logger.info(
             "Whisperモデルロード完了: model=%s, device=%s",
             model_name,
             self._device,
         )
+
+    def _unload_model(self) -> None:
+        """
+        現在のモデルをメモリから解放する。
+
+        GPUメモリも明示的に解放する。
+        """
+        if self._model is not None:
+            del self._model
+            self._model = None
+            self._model_loaded = False
+            self._current_model_name = None
+            self._current_device = None
+
+            # GPUメモリの解放
+            try:
+                import torch
+
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+            except ImportError:
+                pass
+
+            logger.info("Whisperモデルをメモリから解放しました。")
 
     def transcribe(
         self,
@@ -232,3 +283,13 @@ class TranscriberService:
     def device(self) -> str:
         """現在の推論デバイス"""
         return self._device
+
+    @property
+    def current_model_name(self) -> str | None:
+        """現在ロード中のモデル名"""
+        return self._current_model_name
+
+    @property
+    def current_device(self) -> str | None:
+        """現在の推論デバイス名"""
+        return self._current_device

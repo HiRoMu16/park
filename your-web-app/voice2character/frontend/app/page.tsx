@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import FileUploader from '@/components/FileUploader';
 import JobList from '@/components/JobList';
+import SystemInfoPanel from '@/components/SystemInfoPanel';
 
 /** 機能紹介カードのデータ */
 const FEATURES = [
@@ -113,6 +114,15 @@ export default function HomePage() {
             ドラッグ&ドロップでファイルをアップロードするだけで、
             AIが高精度にテキストを生成します。
           </p>
+        </div>
+      </section>
+
+      {/* ============================================
+          システム環境情報セクション
+          ============================================ */}
+      <section>
+        <div className="mx-auto max-w-3xl">
+          <SystemInfoPanel />
         </div>
       </section>
 

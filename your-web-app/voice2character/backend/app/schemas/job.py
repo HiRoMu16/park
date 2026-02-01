@@ -47,6 +47,16 @@ class JobCreate(BaseModel):
     file_size: int = Field(..., gt=0, description="ファイルサイズ（バイト）")
     # 文字起こし対象言語
     language: str = Field(default="ja", max_length=10, description="文字起こし対象の言語コード")
+    # 使用するWhisperモデル名（未指定時はサーバー設定を使用）
+    whisper_model: Optional[str] = Field(
+        default=None,
+        description="使用するWhisperモデル名（tiny/base/small/medium/large-v3）",
+    )
+    # 推論デバイス（未指定時はサーバー設定を使用）
+    whisper_device: Optional[str] = Field(
+        default=None,
+        description="推論デバイス（auto/cpu/cuda）",
+    )
 
     @field_validator("file_name")
     @classmethod
@@ -57,6 +67,30 @@ class JobCreate(BaseModel):
         for char in dangerous_chars:
             if char in v:
                 raise ValueError(f"ファイル名に不正な文字が含まれています: {char!r}")
+        return v
+
+    @field_validator("whisper_model")
+    @classmethod
+    def validate_whisper_model(cls, v: Optional[str]) -> Optional[str]:
+        """Whisperモデル名のバリデーション"""
+        if v is not None:
+            valid_models = ["tiny", "base", "small", "medium", "large-v3"]
+            if v not in valid_models:
+                raise ValueError(
+                    f"無効なモデル名です: {v}。有効値: {', '.join(valid_models)}"
+                )
+        return v
+
+    @field_validator("whisper_device")
+    @classmethod
+    def validate_whisper_device(cls, v: Optional[str]) -> Optional[str]:
+        """推論デバイスのバリデーション"""
+        if v is not None:
+            valid_devices = ["auto", "cpu", "cuda"]
+            if v not in valid_devices:
+                raise ValueError(
+                    f"無効なデバイスです: {v}。有効値: {', '.join(valid_devices)}"
+                )
         return v
 
 
@@ -116,6 +150,8 @@ class JobResponse(BaseModel):
     progress: float = Field(..., description="進捗率（0.0～100.0）")
     error_message: Optional[str] = Field(None, description="エラーメッセージ")
     language: str = Field(..., description="文字起こし対象の言語")
+    whisper_model: Optional[str] = Field(None, description="使用するWhisperモデル名")
+    whisper_device: Optional[str] = Field(None, description="推論デバイス")
     created_at: datetime = Field(..., description="作成日時")
     updated_at: datetime = Field(..., description="最終更新日時")
     completed_at: Optional[datetime] = Field(None, description="完了日時")

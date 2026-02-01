@@ -211,16 +211,26 @@ def process_transcription_task(self, job_id: str) -> dict:
             job_id, "transcribing", 35.0, "文字起こしを開始します..."
         )
 
-        # Whisperモデルのロード（初回のみ）
+        # Whisperモデルのロード（ジョブ固有の設定を使用、未指定時はサーバー設定にフォールバック）
         transcriber = TranscriberService()
-        if not transcriber.is_loaded:
+        job_model = job.whisper_model or settings.WHISPER_MODEL
+        job_device = job.whisper_device or settings.get_whisper_device()
+
+        # モデルの初回ロードまたは再ロードが必要か判定
+        needs_load = (
+            not transcriber.is_loaded
+            or transcriber.current_model_name != job_model
+            or transcriber.current_device != job_device
+        )
+
+        if needs_load:
             _send_progress_via_websocket(
                 job_id, "transcribing", 35.0,
-                "Whisperモデルをロードしています（初回のみ）..."
+                f"Whisperモデル（{job_model}）をロードしています..."
             )
             transcriber.load_model(
-                model_name=settings.WHISPER_MODEL,
-                device=settings.get_whisper_device(),
+                model_name=job_model,
+                device=job_device,
                 download_root=settings.WHISPER_MODEL_DIR,
             )
 

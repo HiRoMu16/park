@@ -69,6 +69,8 @@ async def init_upload(
         file_name=request.file_name,
         file_size=request.file_size,
         language=request.language,
+        whisper_model=request.whisper_model,
+        whisper_device=request.whisper_device,
         status="uploading",
         progress=0.0,
     )

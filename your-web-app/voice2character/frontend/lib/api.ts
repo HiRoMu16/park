@@ -12,6 +12,7 @@ import type {
   UploadCompleteResponse,
   ExportFormat,
   ApiError,
+  SystemInfo,
 } from '@/types';
 
 /** APIのベースURL（プロキシ経由のため相対パス） */
@@ -72,21 +73,30 @@ function getHeaders(): Record<string, string> {
  * @param fileName - ファイル名
  * @param fileSize - ファイルサイズ（バイト）
  * @param language - 言語コード（例: "ja", "en", "auto"）
+ * @param whisperModel - Whisperモデル名（オプション）
+ * @param whisperDevice - 推論デバイス（オプション）
  * @returns ジョブIDとアップロードIDを含むレスポンス
  */
 export async function initUpload(
   fileName: string,
   fileSize: number,
-  language: string = 'auto'
+  language: string = 'auto',
+  whisperModel: string | null = null,
+  whisperDevice: string | null = null,
 ): Promise<UploadInitResponse> {
+  // リクエストボディの構築（null以外のフィールドのみ含める）
+  const body: Record<string, unknown> = {
+    file_name: fileName,
+    file_size: fileSize,
+    language,
+  };
+  if (whisperModel) body.whisper_model = whisperModel;
+  if (whisperDevice) body.whisper_device = whisperDevice;
+
   const response = await fetch(`${BASE_URL}/upload/init`, {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify({
-      file_name: fileName,
-      file_size: fileSize,
-      language,
-    }),
+    body: JSON.stringify(body),
   });
   return handleResponse<UploadInitResponse>(response);
 }
@@ -270,6 +280,23 @@ export async function deleteJob(jobId: string): Promise<void> {
  */
 export function getExportUrl(jobId: string, format: ExportFormat): string {
   return `${BASE_URL}/export/${jobId}?format=${format}`;
+}
+
+// ============================================
+// システム情報API
+// ============================================
+
+/**
+ * サーバーのシステム情報を取得
+ * CPU、RAM、GPU情報とWhisperモデル推奨設定を返す
+ *
+ * @returns システム情報レスポンス
+ */
+export async function getSystemInfo(): Promise<SystemInfo> {
+  const response = await fetch(`${BASE_URL}/system/info`, {
+    headers: getHeaders(),
+  });
+  return handleResponse<SystemInfo>(response);
 }
 
 // ============================================

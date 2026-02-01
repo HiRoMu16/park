@@ -23,8 +23,8 @@ import {
   UploadCloud,
 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { initUpload, uploadChunk, completeUpload, formatFileSize } from '@/lib/api';
-import type { UploadProgress } from '@/types';
+import { initUpload, uploadChunk, completeUpload, formatFileSize, getSystemInfo } from '@/lib/api';
+import type { UploadProgress, SystemInfo } from '@/types';
 
 /** チャンクサイズ: 100MB */
 const CHUNK_SIZE = 100 * 1024 * 1024;
@@ -68,6 +68,9 @@ export default function FileUploader() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploads, setUploads] = useState<FileUploadState[]>([]);
   const [language, setLanguage] = useState('auto');
+  const [whisperModel, setWhisperModel] = useState<string | null>(null);
+  const [whisperDevice, setWhisperDevice] = useState<string | null>(null);
+  const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
   const abortControllerRef = useRef<Map<string, boolean>>(new Map());
 
   /** ファイル形式のバリデーション */
@@ -164,7 +167,9 @@ export default function FileUploader() {
       const { job_id } = await initUpload(
         uploadState.file.name,
         uploadState.file.size,
-        language
+        language,
+        whisperModel,
+        whisperDevice,
       );
 
       setUploads((prev) => {
@@ -267,7 +272,7 @@ export default function FileUploader() {
         return updated;
       });
     }
-  }, [uploads, language, router]);
+  }, [uploads, language, whisperModel, whisperDevice, router]);
 
   /** 全ファイルのアップロード開始 */
   const startAllUploads = useCallback(() => {
@@ -342,6 +347,22 @@ export default function FileUploader() {
 
   /** 待機中のファイルがあるかチェック */
   const hasPendingFiles = uploads.some((u) => u.status === 'pending');
+
+  /** マウント時にシステム情報を取得し、推奨設定で初期化する */
+  useEffect(() => {
+    getSystemInfo()
+      .then((info) => {
+        setSystemInfo(info);
+        setWhisperModel(info.recommendation.model);
+        setWhisperDevice(info.recommendation.device);
+      })
+      .catch((err) => {
+        console.error('システム情報の取得に失敗:', err);
+        // フォールバック: デフォルト値を設定
+        setWhisperModel('small');
+        setWhisperDevice('auto');
+      });
+  }, []);
 
   // コンポーネントのクリーンアップ
   useEffect(() => {
@@ -418,36 +439,93 @@ export default function FileUploader() {
         </div>
       </div>
 
-      {/* 言語選択とアップロードボタン */}
+      {/* 設定選択とアップロードボタン */}
       {uploads.length > 0 && (
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          {/* 言語選択 */}
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              文字起こし言語
-            </label>
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 sm:w-48"
-            >
-              {LANGUAGE_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+        <div className="flex flex-col gap-4">
+          {/* 設定セレクト行（3列グリッド） */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {/* 言語選択 */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                文字起こし言語
+              </label>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+              >
+                {LANGUAGE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Whisperモデル選択 */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Whisperモデル
+                {systemInfo && whisperModel === systemInfo.recommendation.model && (
+                  <span className="ml-1.5 text-xs font-normal text-green-500">推奨</span>
+                )}
+              </label>
+              <select
+                value={whisperModel ?? ''}
+                onChange={(e) => setWhisperModel(e.target.value || null)}
+                className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+              >
+                {systemInfo ? (
+                  systemInfo.whisper_models.map((m) => (
+                    <option key={m.name} value={m.name}>
+                      {m.name} ({m.parameters}, {m.relative_speed})
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="tiny">tiny (39M, ~32x)</option>
+                    <option value="base">base (74M, ~16x)</option>
+                    <option value="small">small (244M, ~6x)</option>
+                    <option value="medium">medium (769M, ~2x)</option>
+                    <option value="large-v3">large-v3 (1.5B, 1x)</option>
+                  </>
+                )}
+              </select>
+            </div>
+
+            {/* 推論デバイス選択 */}
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                推論デバイス
+                {systemInfo && whisperDevice === systemInfo.recommendation.device && (
+                  <span className="ml-1.5 text-xs font-normal text-green-500">推奨</span>
+                )}
+              </label>
+              <select
+                value={whisperDevice ?? 'auto'}
+                onChange={(e) => setWhisperDevice(e.target.value)}
+                className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="auto">自動検出</option>
+                <option value="cpu">CPU</option>
+                {systemInfo?.gpu && (
+                  <option value="cuda">GPU ({systemInfo.gpu.name})</option>
+                )}
+              </select>
+            </div>
           </div>
 
           {/* アップロード開始ボタン */}
           {hasPendingFiles && (
-            <button
-              onClick={startAllUploads}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:from-brand-600 hover:to-brand-700 hover:shadow-xl hover:shadow-brand-500/30 active:scale-[0.98]"
-            >
-              <Upload className="h-4 w-4" />
-              アップロード開始
-            </button>
+            <div className="flex justify-end">
+              <button
+                onClick={startAllUploads}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition-all duration-200 hover:from-brand-600 hover:to-brand-700 hover:shadow-xl hover:shadow-brand-500/30 active:scale-[0.98]"
+              >
+                <Upload className="h-4 w-4" />
+                アップロード開始
+              </button>
+            </div>
           )}
         </div>
       )}

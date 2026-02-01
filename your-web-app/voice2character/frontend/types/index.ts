@@ -22,6 +22,8 @@ export interface Job {
   progress: number;
   error_message: string | null;
   language: string;
+  whisper_model: string | null;
+  whisper_device: string | null;
   created_at: string;
   updated_at: string;
   completed_at: string | null;
@@ -101,3 +103,62 @@ export interface ChunkUploadResponse {
 
 /** アップロード完了レスポンス - バックエンドのJobResponseと同じ */
 export type UploadCompleteResponse = Job;
+
+// ============================================
+// システム情報関連の型
+// ============================================
+
+/** CPU情報 */
+export interface CpuInfo {
+  model: string;
+  physical_cores: number;
+  logical_cores: number;
+  frequency_mhz: number | null;
+}
+
+/** RAM情報 */
+export interface RamInfo {
+  total_gb: number;
+  available_gb: number;
+  used_percent: number;
+}
+
+/** GPU情報 */
+export interface GpuInfo {
+  name: string;
+  vram_total_gb: number;
+  vram_available_gb: number;
+  cuda_version: string;
+  device_count: number;
+}
+
+/** Whisperモデル情報 */
+export interface WhisperModelInfo {
+  name: string;
+  parameters: string;
+  required_vram_gb: number;
+  required_ram_gb: number;
+  relative_speed: string;
+  description: string;
+}
+
+/** システム推奨設定 */
+export interface SystemRecommendation {
+  model: string;
+  device: string;
+  reason: string;
+}
+
+/** システム情報レスポンス */
+export interface SystemInfo {
+  cpu: CpuInfo;
+  ram: RamInfo;
+  gpu: GpuInfo | null;
+  platform: {
+    system: string;
+    release: string;
+    python_version: string;
+  };
+  whisper_models: WhisperModelInfo[];
+  recommendation: SystemRecommendation;
+}

@@ -50,3 +50,6 @@ htmlcov/
 
 # エラーログファイル
 error*.txt
+
+# Claude Code
+.claude/

@@ -135,15 +135,17 @@ OpenAI Whisper Large-v3を使用し、日本語を中心とした多言語の音
 | `app/models/job.py` | `Job`テーブル（ジョブ管理）と`TranscriptionSegment`テーブル（セグメント管理）の定義 |
 | `app/schemas/__init__.py` | スキーマパッケージ。全Pydanticスキーマをエクスポート |
 | `app/schemas/job.py` | Pydanticスキーマ: JobCreate, UploadChunkRequest, ExportRequest, JobResponse, SegmentResponse, TranscriptionResponse, UploadInitResponse, ProgressUpdate。JobStatus/ExportFormat列挙型 |
-| `app/api/__init__.py` | メインAPIルーター（`/api`プレフィックス）。upload, jobs, exportルーターを集約 |
+| `app/api/__init__.py` | メインAPIルーター（`/api`プレフィックス）。upload, jobs, export, systemルーターを集約 |
 | `app/api/routes/__init__.py` | ルートパッケージ |
 | `app/api/routes/upload.py` | アップロードAPI: `POST /api/upload/init`, `POST /api/upload/{id}/chunk`, `POST /api/upload/{id}/complete` |
 | `app/api/routes/jobs.py` | ジョブ管理API: `GET /api/jobs`, `GET /api/jobs/{id}`, `GET /api/jobs/{id}/transcription`, `DELETE /api/jobs/{id}` |
 | `app/api/routes/export.py` | エクスポートAPI: `GET /api/export/{id}?format=txt\|srt\|vtt\|json\|tsv` |
+| `app/api/routes/system.py` | システム情報API: `GET /api/system/info`。CPU/RAM/GPU検出、Whisperモデル推奨設定を返す |
 | `app/api/websocket.py` | `ConnectionManager`クラス（シングルトン）。ジョブIDごとのWebSocket接続管理、進捗ブロードキャスト、ping/pong対応 |
 | `app/services/__init__.py` | サービスパッケージ |
 | `app/services/audio_extractor.py` | `AudioExtractor`クラス。FFmpegで音声抽出（16kHz, mono, PCM16）。ffprobeで長さ取得・メディア検証 |
-| `app/services/transcriber.py` | `TranscriberService`クラス（シングルトン + スレッドロック）。Whisperモデルロード、文字起こし実行、セグメント整形。日本語最適化パラメータ（beam_size=5, temperature=0, VADフィルタ有効） |
+| `app/services/system_info.py` | `SystemInfoService`クラス。psutil/torch.cudaによるハードウェア検出、Whisperモデル推奨エンジン。`WHISPER_MODELS`定数（モデルメタデータ一元管理） |
+| `app/services/transcriber.py` | `TranscriberService`クラス（シングルトン + スレッドロック）。Whisperモデルロード・再ロード対応、文字起こし実行、セグメント整形。日本語最適化パラメータ（beam_size=5, temperature=0, VADフィルタ有効） |
 | `app/services/file_manager.py` | `FileManager`クラス。チャンク保存・結合・削除、ジョブファイル全削除、ディスク容量確認 |
 | `app/services/export_service.py` | `ExportService`クラス。TXT/SRT/VTT/JSON/TSVの5形式変換。タイムスタンプフォーマッタ（SRT: カンマ区切り、VTT: ドット区切り） |
 | `app/workers/__init__.py` | Celeryアプリケーション初期化。ブローカー/バックエンドはRedis。`task_acks_late=True`, `worker_concurrency=1` |
@@ -159,15 +161,16 @@ OpenAI Whisper Large-v3を使用し、日本語を中心とした多言語の音
 | `tsconfig.json` | TypeScript厳格モード。パスエイリアス `@/*` |
 | `postcss.config.js` | PostCSS + Tailwind CSS + autoprefixer |
 | `tailwind.config.ts` | ダークモード（class戦略）、ブランドカラー（indigo系）、Noto Sans JPフォント、カスタムアニメーション6種 |
-| `types/index.ts` | 共通型定義: Job, TranscriptionSegment, Transcription, UploadProgress, JobListResponse, ExportFormat, ProgressMessage, ApiError, UploadInitResponse, ChunkUploadResponse |
-| `lib/api.ts` | API通信ライブラリ。fetch/XHRラッパー、チャンクアップロード進捗追跡（XMLHttpRequest）、エラーハンドリング（ApiRequestError）、ユーティリティ（formatFileSize, formatDuration, formatDate） |
+| `types/index.ts` | 共通型定義: Job, TranscriptionSegment, Transcription, UploadProgress, JobListResponse, ExportFormat, ProgressMessage, ApiError, UploadInitResponse, ChunkUploadResponse, CpuInfo, RamInfo, GpuInfo, WhisperModelInfo, SystemRecommendation, SystemInfo |
+| `lib/api.ts` | API通信ライブラリ。fetch/XHRラッパー、チャンクアップロード進捗追跡（XMLHttpRequest）、エラーハンドリング（ApiRequestError）、`getSystemInfo()`（システム情報取得）、ユーティリティ（formatFileSize, formatDuration, formatDate） |
 | `lib/websocket.ts` | `WebSocketManager`クラス。自動再接続（最大10回、指数バックオフ1秒-30秒+ジッター）、接続状態管理、進捗コールバック、リソースクリーンアップ |
 | `app/globals.css` | Tailwind指令、ダークモードCSS、プログレスバーアニメーション（shimmer, stripes）、ドロップゾーン、ガラスモーフィズム、カスタムスクロールバー |
 | `app/layout.tsx` | ルートレイアウト（`'use client'`）。DarkModeContext（localStorage + システム設定自動検出）、Header/Footer配置、Noto Sans JPフォント読み込み |
 | `app/page.tsx` | トップページ。ヒーローセクション、FileUploader、JobList、機能紹介カード6種、対応形式一覧 |
 | `app/jobs/[id]/page.tsx` | ジョブ詳細ページ。ジョブ情報カード、ProgressTracker、TranscriptionViewer、ExportPanel、WebSocket接続管理、ステータスバッジ、エラーリトライ |
 | `components/Header.tsx` | ヘッダー。ロゴ（Mic SVG + "VoiceScribe"）、デスクトップ/モバイルナビ、ダークモードトグル、sticky + backdrop-blur |
-| `components/FileUploader.tsx` | ファイルアップローダー。D&D対応、チャンク分割アップロード（100MB）、進捗バー（%/速度/残り時間）、言語選択（5言語）、キャンセル機能、アップロード完了後自動遷移 |
+| `components/FileUploader.tsx` | ファイルアップローダー。D&D対応、チャンク分割アップロード（100MB）、進捗バー（%/速度/残り時間）、言語・モデル・デバイス選択（3列グリッド）、キャンセル機能、アップロード完了後自動遷移 |
+| `components/SystemInfoPanel.tsx` | システム環境情報パネル。CPU/RAM/GPU情報表示、推奨設定ハイライト、折りたたみ可能、ローディング・エラーハンドリング |
 | `components/JobList.tsx` | ジョブ一覧。カード表示、ステータスバッジ（6種色分け）、ページネーション（8件/ページ）、削除（確認ダイアログ）、空状態表示 |
 | `components/ProgressTracker.tsx` | 進捗表示。円形SVGプログレスバー、4ステップインジケーター（アップロード/音声抽出/文字起こし/完了）、接続線アニメーション、エラー/完了表示 |
 | `components/TranscriptionViewer.tsx` | 結果表示。セグメント/フルテキスト表示切替、テキスト検索+ハイライト、全文コピー、信頼度スコア表示（低信頼度マーキング閾値70%）、統計情報、スクロールトップ |
@@ -223,6 +226,8 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
 | progress  (FLOAT)         |          | confidence    (FLOAT)        |
 | error_message (VARCHAR)   |          +-------------------------------+
 | language  (VARCHAR)       |
+| whisper_model (VARCHAR)   |
+| whisper_device (VARCHAR)  |
 | created_at (TIMESTAMP TZ) |
 | updated_at (TIMESTAMP TZ) |
 | completed_at (TIMESTAMP TZ)|
@@ -245,7 +250,7 @@ uploading -> queued -> extracting -> transcribing -> completed
 
 | メソッド | URL | パラメータ | レスポンス | 説明 |
 |----------|-----|-----------|-----------|------|
-| POST | `/api/upload/init` | Body: `{file_name, file_size, language}` | `{job_id, upload_url, chunk_size}` (201) | ジョブ作成。拡張子・サイズ検証 |
+| POST | `/api/upload/init` | Body: `{file_name, file_size, language, whisper_model?, whisper_device?}` | `{job_id, upload_url, chunk_size}` (201) | ジョブ作成。拡張子・サイズ検証。モデル・デバイス指定可 |
 | POST | `/api/upload/{job_id}/chunk` | Query: `chunk_index, total_chunks`、Form: `file` (multipart) | `{status, chunk_index, total_chunks, message}` (200) | チャンク保存。進捗0-10% |
 | POST | `/api/upload/{job_id}/complete` | Query: `total_chunks` | `JobResponse` (200) | チャンク結合、Celeryタスク投入、ステータスqueued |
 
@@ -268,6 +273,7 @@ uploading -> queued -> extracting -> transcribing -> completed
 
 | メソッド | URL | レスポンス | 説明 |
 |----------|-----|-----------|------|
+| GET | `/api/system/info` | `{cpu, ram, gpu, whisper_models[], recommendation}` | サーバー環境情報・Whisperモデル推奨設定 |
 | GET | `/api/health` | `{status, app, version, whisper_model, database, redis}` | ヘルスチェック |
 | WebSocket | `/ws/{job_id}` | JSON: `{job_id, status, progress, message}` | 進捗リアルタイム通知 |
 
@@ -283,9 +289,11 @@ uploading -> queued -> extracting -> transcribing -> completed
 #### TranscriberService (`app/services/transcriber.py`)
 
 - **シングルトンパターン** + `threading.Lock` によるスレッドセーフ性。
-- モデルは初回呼び出し時に一度だけロード。以降は再利用。
-- `load_model(model_name, device, download_root)` --- Whisperモデルロード
+- モデルは初回呼び出し時にロード。以降は同じmodel+deviceなら再利用、異なる場合は自動再ロード。
+- `load_model(model_name, device, download_root)` --- Whisperモデルロード（同一設定時はスキップ、異なる場合は`_unload_model()`後に再ロード）
+- `_unload_model()` --- モデル解放 + `torch.cuda.empty_cache()`でGPUメモリ解放
 - `transcribe(audio_path, language, progress_callback)` --- 文字起こし実行
+- `current_model_name` / `current_device` --- 現在ロード中のモデル名・デバイス（プロパティ）
 - **日本語最適化パラメータ:**
   - `beam_size=5`, `best_of=5` --- 精度重視
   - `temperature=0` --- 決定的生成
@@ -344,7 +352,8 @@ process_transcription_task(job_id):
     |
     | === ステップ3: 文字起こし (35%-90%) ===
     | (7) ステータス -> "transcribing"
-    | (8) TranscriberService().load_model() (初回のみ)
+    | (7.5) ジョブのwhisper_model/whisper_deviceを取得（null時はサーバー設定にフォールバック）
+    | (8) TranscriberService().load_model() (初回 or モデル/デバイス変更時に再ロード)
     | (9) transcriber.transcribe() 実行
     |     -> progress_callback で進捗を35%-90%にマッピング
     |
@@ -460,7 +469,7 @@ app/
 - `ApiRequestError`クラス: HTTPステータスコード+エラー詳細をラップ
 - `handleResponse<T>()`: レスポンスバリデーション共通関数
 - 主要関数:
-  - `initUpload(fileName, fileSize, language)` --- アップロード初期化
+  - `initUpload(fileName, fileSize, language, whisperModel?, whisperDevice?)` --- アップロード初期化（モデル・デバイス指定対応）
   - `uploadChunk(jobId, chunkIndex, totalChunks, chunk, onProgress?)` --- チャンク送信（XMLHttpRequestで進捗追跡）
   - `completeUpload(jobId, totalChunks)` --- アップロード完了
   - `getJobs(page, pageSize)` --- ジョブ一覧
@@ -468,6 +477,7 @@ app/
   - `getTranscription(jobId)` --- 文字起こし結果
   - `deleteJob(jobId)` --- ジョブ削除
   - `getExportUrl(jobId, format)` --- エクスポートURL生成
+  - `getSystemInfo()` --- サーバー環境情報取得（CPU/RAM/GPU/推奨設定）
 - ユーティリティ:
   - `formatFileSize(bytes)` --- ファイルサイズ表示
   - `formatDuration(seconds)` --- 時間表示
@@ -513,7 +523,7 @@ app/
    - JobCreate スキーマでバリデーション
    - is_allowed_extension() で拡張子チェック
    - MAX_FILE_SIZE でサイズチェック
-   - Job レコード作成（status="uploading"）
+   - Job レコード作成（status="uploading"、whisper_model/whisper_device保存）
    - 返却: {job_id, upload_url, chunk_size}
 
 2. POST /api/upload/{job_id}/chunk?chunk_index=N&total_chunks=M
@@ -540,6 +550,9 @@ app/
 - `isDragOver: boolean` --- ドラッグオーバー状態
 - `uploads: FileUploadState[]` --- アップロードファイル一覧（各ファイルのstatus, progress, jobId, error）
 - `language: string` --- 選択言語
+- `whisperModel: string` --- 選択Whisperモデル（推奨値で初期化）
+- `whisperDevice: string` --- 選択デバイス（'auto' / 'cpu' / 'cuda'、推奨値で初期化）
+- `systemInfo: SystemInfo | null` --- サーバー環境情報（マウント時に取得）
 - `abortControllerRef: Map<string, boolean>` --- キャンセルフラグ管理
 
 **JobList.tsx:**
@@ -622,6 +635,10 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 - Docker構成の実装（docker-compose.yml, Dockerfile x2, nginx.conf, redis.conf）
 - 環境変数テンプレート（.env.example）
 - Git除外設定（.gitignore）
+- PC環境確認機能（CPU/RAM/GPU検出 + SystemInfoPanelコンポーネント）
+- Whisperモデル選択機能（ドロップダウンUI + ジョブ別モデル指定 + 推奨設定自動検出）
+- デバイス選択機能（CPU/GPU選択 + GPU自動検出 + ジョブ別デバイス指定）
+- TranscriberServiceモデル再ロード対応（異なるモデル/デバイスへの動的切替）
 
 ### 残課題・将来の改善提案
 
@@ -667,8 +684,10 @@ worker   -> db (condition: service_healthy), redis (condition: service_healthy)
 ### Whisperモデルのシングルトンパターンとスレッドセーフ性
 
 - `TranscriberService`は`__new__`メソッドと`threading.Lock`でスレッドセーフなシングルトンを実装。
-- GPU上のモデルは一度だけロードされ、複数のリクエストで再利用される。
-- Celeryの`worker_concurrency=1`により、同時に1つのタスクのみがWhisperモデルを使用する。
+- GPU上のモデルは一度ロードされ、同じmodel+deviceの場合は再利用。異なる場合は自動的に再ロード。
+- `_unload_model()`でモデル解放+`torch.cuda.empty_cache()`によるGPUメモリ解放を行う。
+- Celeryの`worker_concurrency=1`により、同時に1つのタスクのみがWhisperモデルを使用するため、モデル再ロードが安全。
+- ジョブごとに`whisper_model`/`whisper_device`を指定可能。未指定時はサーバーデフォルト設定にフォールバック。
 
 ### チャンクアップロードのバックエンド/フロントエンド間プロトコル
 
@@ -781,12 +800,14 @@ npm run lint
 6. **backend/app/main.py** --- FastAPIアプリの起動フローとミドルウェアを確認する
 7. **backend/app/api/routes/upload.py** --- チャンクアップロードの仕組みを理解する
 8. **backend/app/workers/tasks.py** --- 文字起こし処理パイプラインの全体フローを理解する
-9. **backend/app/services/transcriber.py** --- Whisperの設定パラメータを確認する
-10. **frontend/types/index.ts** --- フロントエンドの型定義を把握する
-11. **frontend/lib/api.ts** --- API通信の実装を確認する
-12. **frontend/lib/websocket.ts** --- WebSocket管理の実装を確認する
-13. **frontend/components/FileUploader.tsx** --- チャンクアップロードのフロントエンド実装を確認する
-14. **frontend/app/jobs/[id]/page.tsx** --- ジョブ詳細ページのWebSocket連携を確認する
+9. **backend/app/services/transcriber.py** --- Whisperの設定パラメータとモデル再ロード機構を確認する
+10. **backend/app/services/system_info.py** --- Whisperモデルメタデータと推奨設定ロジックを確認する
+11. **frontend/types/index.ts** --- フロントエンドの型定義を把握する
+12. **frontend/lib/api.ts** --- API通信の実装を確認する
+13. **frontend/lib/websocket.ts** --- WebSocket管理の実装を確認する
+14. **frontend/components/FileUploader.tsx** --- チャンクアップロード・モデル/デバイス選択のフロントエンド実装を確認する
+15. **frontend/components/SystemInfoPanel.tsx** --- システム環境情報パネルの実装を確認する
+16. **frontend/app/jobs/[id]/page.tsx** --- ジョブ詳細ページのWebSocket連携を確認する
 
 ### 修正・追加機能を実装する際の注意事項
 
@@ -801,3 +822,5 @@ npm run lint
    - `types/index.ts`に`PaginatedResponse`型が未定義だが`JobList.tsx`で使用されている。
 7. **環境変数の管理** --- `.env`ファイルはgitignoreに含まれている。新しい環境変数を追加した場合は`.env.example`にも追記すること。
 8. **テストの追加** --- 現在テストコードは存在しない。機能追加時にはテストも併せて実装することを推奨。
+9. **DBマイグレーション** --- 現在は`create_tables()`（`Base.metadata.create_all()`）による自動テーブル作成を使用。既存テーブルにカラムを追加した場合（例: `whisper_model`, `whisper_device`）、Docker環境を`docker compose down -v && docker compose up`で再構築するか、手動で`ALTER TABLE jobs ADD COLUMN ...`を実行する必要がある。
+10. **Whisperモデル選択の仕様** --- `WHISPER_MODELS`定数（`system_info.py`）がモデルメタデータの唯一のソース。推奨エンジンは利用可能メモリの80%以内で動作する最大モデルを推奨する。ジョブのmodel/deviceがnullの場合はサーバーデフォルト（`config.py`のWHISPER_MODEL/WHISPER_DEVICE）にフォールバックする。
